@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE tmres SYSTEM "tmres.dtd">
+<tmres>
+ <bookmarks>
+<bookmark offset="32784" columns="16" rows="16" blockwidth="16" blockheight="16" rowinterleaved="false" sizeblocktocanvas="true" mode="1D" palIndex="3" codec="CP00">
+  <description>MainGameTiles</description>
+</bookmark>
+<bookmark offset="40976" columns="16" rows="16" blockwidth="16" blockheight="16" rowinterleaved="false" sizeblocktocanvas="true" mode="1D" palIndex="3" codec="CP00">
+  <description>Sprites</description>
+</bookmark>
+<bookmark offset="49168" columns="16" rows="16" blockwidth="16" blockheight="16" rowinterleaved="false" sizeblocktocanvas="true" mode="1D" palIndex="3" codec="CP00">
+  <description>MenueScreen Tiles</description>
+</bookmark>
+<bookmark offset="53264" columns="16" rows="16" blockwidth="16" blockheight="16" rowinterleaved="false" sizeblocktocanvas="true" mode="1D" palIndex="3" codec="CP00">
+  <description>TitleScreenSprites</description>
+</bookmark>
+<bookmark offset="61456" columns="16" rows="16" blockwidth="16" blockheight="16" rowinterleaved="false" sizeblocktocanvas="true" mode="1D" palIndex="3" codec="CP00">
+  <description>TitleScreenTiles</description>
+</bookmark>
+ </bookmarks>
+ <palettes>
+<palette size="32" direct="no" offset="6262" codec="CF02" endianness="little">
+  <description>MaineGameTilesThenSprites</description>
+</palette>
+<palette size="16" direct="no" offset="15987" codec="CF02" endianness="little">
+  <description>PaletteMenueScreen</description>
+</palette>
+<palette size="16" direct="no" offset="6262" codec="CF02" endianness="little">
+  <description>PaletteTitleScreen</description>
+</palette>
+ </palettes>
+</tmres>
