@@ -1996,6 +1996,10 @@ bra_8DA5:
 C - - - - - 0x000DB5 00:8DA5: E6 86     INC ram_pill_pos_Y
 C - - - - - 0x000DB7 00:8DA7: A9 07     LDA #con_sfx_1_07
 C - - - - - 0x000DB9 00:8DA9: 8D F1 06  STA ram_sfx_1
+LDA #$FF
+    STA $4104
+    LDA #$09
+    STA $4106
 C - - - - - 0x000DBC 00:8DAC: 20 52 8F  JSR sub_8F52
 C - - - - - 0x000DBF 00:8DAF: AD 40 07  LDA ram_hacking_protection
 C - - - - - 0x000DC2 00:8DB2: F0 05     BEQ bra_8DB9_check_passed
@@ -2027,12 +2031,12 @@ C - - - - - 0x000DDF 00:8DCF: C9 10     CMP #$10
 C - - - - - 0x000DE1 00:8DD1: 30 57     BMI bra_8E2A_RTS
 C - - - - - 0x000DE3 00:8DD3: A9 0A     LDA #$0A
 C - - - - - 0x000DE5 00:8DD5: 85 93     STA ram_combo_counter_2
+
 C - - - - - 0x000DE7 00:8DD7: 4C E3 8D  JMP loc_8DE3
 bra_8DDA:
 C - - - - - 0x000DEA 00:8DDA: A9 00     LDA #$00
 C - - - - - 0x000DEC 00:8DDC: 85 93     STA ram_combo_counter_2
-C - - - - - 0x000DEE 00:8DDE: A9 03     LDA #con_sfx_1_03
-C - - - - - 0x000DF0 00:8DE0: 8D F1 06  STA ram_sfx_1
+; rotate counterclock-wise
 loc_8DE3:
 C D 0 - - - 0x000DF3 00:8DE3: A5 5C     LDA ram_plr_btn_hold
 C - - - - - 0x000DF5 00:8DE5: 29 01     AND #con_btn_Right
@@ -2046,8 +2050,7 @@ C - - - - - 0x000E02 00:8DF2: F0 15     BEQ bra_8E09
 C - - - - - 0x000E04 00:8DF4: E6 85     INC ram_pill_pos_X
 C - - - - - 0x000E06 00:8DF6: 20 D3 90  JSR sub_90D3
 C - - - - - 0x000E09 00:8DF9: D0 08     BNE bra_8E03
-C - - - - - 0x000E0B 00:8DFB: A9 03     LDA #con_sfx_1_03
-C - - - - - 0x000E0D 00:8DFD: 8D F1 06  STA ram_sfx_1
+; rotate counterclock-wise
 C - - - - - 0x000E10 00:8E00: 4C 09 8E  JMP loc_8E09
 bra_8E03:
 C - - - - - 0x000E13 00:8E03: C6 85     DEC ram_pill_pos_X
@@ -2055,6 +2058,11 @@ C - - - - - 0x000E15 00:8E05: A9 0F     LDA #$0F
 C - - - - - 0x000E17 00:8E07: 85 93     STA ram_combo_counter_2
 bra_8E09:
 loc_8E09:
+; NEA SFX 02 (pill move)
+                                        LDA #$FF
+                                        STA $4104
+                                        LDA #$02
+                                        STA $4106
 C D 0 - - - 0x000E19 00:8E09: A5 5C     LDA ram_plr_btn_hold
 C - - - - - 0x000E1B 00:8E0B: 29 02     AND #con_btn_Left
 C - - - - - 0x000E1D 00:8E0D: F0 1B     BEQ bra_8E2A_RTS
@@ -2079,6 +2087,10 @@ C D 0 - - - 0x000E3A 00:8E2A: 60        RTS
 
 
 sub_8E2B:
+
+
+
+
 C - - - - - 0x000E3B 00:8E2B: A5 A5     LDA ram_pill_rotate
 C - - - - - 0x000E3D 00:8E2D: 85 4A     STA ram_004A_t02_copy_pill_rotate
 C - - - - - 0x000E3F 00:8E2F: A5 85     LDA ram_pill_pos_X
@@ -2086,8 +2098,11 @@ C - - - - - 0x000E41 00:8E31: 85 4B     STA ram_004B_t04_copy_pill_pos_X
 C - - - - - 0x000E43 00:8E33: A5 5B     LDA ram_plr_btn_press
 C - - - - - 0x000E45 00:8E35: 29 80     AND #con_btn_A
 C - - - - - 0x000E47 00:8E37: F0 10     BEQ bra_8E49
-C - - - - - 0x000E49 00:8E39: A9 05     LDA #con_sfx_1_05
-C - - - - - 0x000E4B 00:8E3B: 8D F1 06  STA ram_sfx_1
+; NEA SFX 01 (rotate A)
+                                        LDA #$FF
+                                        STA $4104
+                                        LDA #$01
+                                        STA $4106
 ; rotate clock-wise
 C - - - - - 0x000E4E 00:8E3E: C6 A5     DEC ram_pill_rotate
 C - - - - - 0x000E50 00:8E40: A5 A5     LDA ram_pill_rotate
@@ -2098,8 +2113,11 @@ bra_8E49:
 C - - - - - 0x000E59 00:8E49: A5 5B     LDA ram_plr_btn_press
 C - - - - - 0x000E5B 00:8E4B: 29 40     AND #con_btn_B
 C - - - - - 0x000E5D 00:8E4D: F0 10     BEQ bra_8E5F_RTS
-C - - - - - 0x000E5F 00:8E4F: A9 05     LDA #con_sfx_1_05
-C - - - - - 0x000E61 00:8E51: 8D F1 06  STA ram_sfx_1
+; NEA SFX 01 (rotate B)
+                                        LDA #$FF
+                                        STA $4104
+                                        LDA #$01
+                                        STA $4106
 ; rotate counterclock-wise
 C - - - - - 0x000E64 00:8E54: E6 A5     INC ram_pill_rotate
 C - - - - - 0x000E66 00:8E56: A5 A5     LDA ram_pill_rotate
@@ -2781,6 +2799,12 @@ C - - - - - 0x00124E 00:923E: A5 47     LDA ram_0047_t24
 C - - - - - 0x001250 00:9240: C9 03     CMP #$03
 C - - - - - 0x001252 00:9242: 30 62     BMI bra_92A6
 C - - - - - 0x001254 00:9244: E6 8F     INC ram_combo_counter_1
+; NEA SFX 05 COMBO horizontal
+;                                        LDA #$FF
+;                                        STA $4104
+;                                        LDA #$05
+;                                        STA $4106
+;
 C - - - - - 0x001256 00:9246: 85 8E     STA ram_008E
 C - - - - - 0x001258 00:9248: 20 4B 94  JSR sub_944B
 C - - - - - 0x00125B 00:924B: A5 A1     LDA ram_00A1
@@ -3095,6 +3119,11 @@ C - - - - - 0x00145A 00:944A: 60        RTS
 
 
 sub_944B:
+; NEA SFX 06 (combo vertical)
+                                        LDA #$FF
+                                        STA $4104
+                                        LDA #$06
+                                        STA $4106
 C - - - - - 0x00145B 00:944B: A5 8F     LDA ram_combo_counter_1
 C - - - - - 0x00145D 00:944D: F0 0A     BEQ bra_9459_RTS
 C - - - - - 0x00145F 00:944F: C9 05     CMP #$05
@@ -3107,14 +3136,14 @@ bra_9459_RTS:
 C - - - - - 0x001469 00:9459: 60        RTS
 
 
-; bzk garbage
+; combo
 - - - - - - 0x00146A 00:945A: A5 8F     LDA ram_combo_counter_1
 - - - - - - 0x00146C 00:945C: C9 02     CMP #$02
 - - - - - - 0x00146E 00:945E: D0 08     BNE bra_9468_RTS
 - - - - - - 0x001470 00:9460: A5 58     LDA ram_0058_temp
 - - - - - - 0x001472 00:9462: 38        SEC
 - - - - - - 0x001473 00:9463: E9 03     SBC #$03
-- - - - - - 0x001475 00:9465: 8D F4 06  STA ram_sfx_4
+
 bra_9468_RTS:
 - - - - - - 0x001478 00:9468: 60        RTS
 
@@ -3156,6 +3185,11 @@ C - - - - - 0x0014AD 00:949D: D0 05     BNE bra_94A4
 C - - - - - 0x0014AF 00:949F: E6 47     INC ram_0047_t23
 C - - - - - 0x0014B1 00:94A1: 4C 88 94  JMP loc_9488_loop
 bra_94A4:
+; NEA SFX 03 - blockfell
+;                                        LDA #$FF
+;                                        STA $4104
+;                                        LDA #$03
+;                                        STA $4106
 C - - - - - 0x0014B4 00:94A4: A5 47     LDA ram_0047_t23
 C - - - - - 0x0014B6 00:94A6: C9 03     CMP #$03
 C - - - - - 0x0014B8 00:94A8: 30 5F     BMI bra_9509
@@ -3169,6 +3203,7 @@ C - - - - - 0x0014C6 00:94B6: 85 A1     STA ram_00A1
 C - - - - - 0x0014C8 00:94B8: E6 A1     INC ram_00A1
 C - - - - - 0x0014CA 00:94BA: A5 59     LDA ram_0059_t02_data_index
 C - - - - - 0x0014CC 00:94BC: 29 78     AND #$78
+
 ; / 08
 C - - - - - 0x0014CE 00:94BE: 4A        LSR
 C - - - - - 0x0014CF 00:94BF: 4A        LSR
@@ -3627,6 +3662,9 @@ C - - - - - 0x0017BF 00:97AF: 8D 8D 06  STA ram_068D
 C - - - - - 0x0017C2 00:97B2: A9 00     LDA #$00
 C - - - - - 0x0017C4 00:97B4: 85 5D     STA ram_005D_flag
 C - - - - - 0x0017C6 00:97B6: 20 54 B6  JSR sub_B654
+; NES PAUSE
+                                        LDA #%00000101    ; bit0 = toggle BGM pause, bit2 = stop all SFX
+                                        STA $4101
 C - - - - - 0x0017C9 00:97B9: A9 16     LDA #$16
 C - - - - - 0x0017CB 00:97BB: 8D 01 20  STA $2001
 C - - - - - 0x0017CE 00:97BE: A9 FF     LDA #$FF
@@ -3634,6 +3672,7 @@ C - - - - - 0x0017D0 00:97C0: A2 02     LDX #$02
 C - - - - - 0x0017D2 00:97C2: A0 02     LDY #$02
 C - - - - - 0x0017D4 00:97C4: 20 94 B8  JSR sub_B894_fill_memory_pages
 loc_97C7_loop:
+
 C D 0 - - - 0x0017D7 00:97C7: A9 70     LDA #$70
 C - - - - - 0x0017D9 00:97C9: 85 44     STA ram_spr_pos_X
 C - - - - - 0x0017DB 00:97CB: A9 77     LDA #$77
@@ -3650,6 +3689,9 @@ C - - - - - 0x0017F0 00:97E0: F0 B7     BEQ bra_9799_reset_the_game
 C - - - - - 0x0017F2 00:97E2: 20 54 B6  JSR sub_B654
 C - - - - - 0x0017F5 00:97E5: 4C C7 97  JMP loc_97C7_loop
 bra_97E8:
+;NEA PAUSE (UNPAuSE)
+                                        LDA #%00000000    ; bit0 = toggle BGM pause
+                                        STA $4101
 C - - - - - 0x0017F8 00:97E8: A9 FF     LDA #$FF    ; bzk optimize, replace with 01 for readability
 C - - - - - 0x0017FA 00:97EA: 85 5D     STA ram_005D_flag
 C - - - - - 0x0017FC 00:97EC: A9 1E     LDA #$1E
@@ -11078,7 +11120,7 @@ C - - - - - 0x0052CE 01:D2BE: 60        RTS
 
 
 loc_D2BF:
-C D 2 - - - 0x0052CF 01:D2BF: A9 0F     LDA #$0F
+C D 2 - - - 0x0052CF 01:D2BF: A9 0F     LDA #%00000000
 C - - - - - 0x0052D1 01:D2C1: 8D 15 40  STA $4015
 C - - - - - 0x0052D4 01:D2C4: A9 55     LDA #$55
 C - - - - - 0x0052D6 01:D2C6: 85 EB     STA ram_random
@@ -11335,7 +11377,7 @@ C - - - - - 0x00540F 01:D3FF: BD F0 06  LDA ram_sounds,X
 C - - - - - 0x005412 01:D402: F0 31     BEQ bra_D435_00
                                     .if con_bzk_hack <> $00
 ; Z = 0
-                                        BNE bra_D405    ; jmp
+                                        BNE bra_D405        ; jmp (Z flag no longer matters after JSR)
                                     .endif
 bra_D404:
                                     .if con_bzk_hack <> $00
@@ -11526,6 +11568,7 @@ C - - - - - 0x005524 01:D514: 60        RTS
 
 
 sub_D515:
+;SFX
 C - - - - - 0x005525 01:D515: A9 00     LDA #$00
 C - - - - - 0x005527 01:D517: 8D 11 40  STA $4011
 C - - - - - 0x00552A 01:D51A: A9 10     LDA #$10
@@ -11591,6 +11634,7 @@ C - - - - - 0x005582 01:D572: A0 04     LDY #$04
 C - - - - - 0x005584 01:D574: 20 2B D5  JSR sub_D52B
 ofs_005_D577_06:
 ; con_sfx_0_06
+
 C - - - - - 0x005587 01:D577: 20 AC D2  JSR sub_D2AC
 C - - - - - 0x00558A 01:D57A: D0 F3     BNE bra_D56F_RTS
 C - - - - - 0x00558C 01:D57C: AD DF 06  LDA ram_06DF
@@ -11670,6 +11714,10 @@ C - - - - - 0x0055E0 01:D5D0: 60        RTS
 
 ofs_005_D5D1_04:
 ; con_sfx_0_04
+                                        LDA #$FF
+                                        STA $4104
+                                        LDA #$04
+                                        STA $4106
 C - - J - - 0x0055E1 01:D5D1: 20 AC D2  JSR sub_D2AC
 C - - - - - 0x0055E4 01:D5D4: D0 99     BNE bra_D56F_RTS
 C - - - - - 0x0055E6 01:D5D6: CE DF 06  DEC ram_06DF
@@ -11719,6 +11767,7 @@ C - - - - - 0x005628 01:D618: 60        RTS
 
 ofs_004_D619_03:
 ; con_sfx_0_03
+
 C - - J - - 0x005629 01:D619: A9 04     LDA #$04
 C - - - - - 0x00562B 01:D61B: A0 1C     LDY #$1C
 C - - - - - 0x00562D 01:D61D: 20 2B D5  JSR sub_D52B
@@ -11773,10 +11822,16 @@ bra_D666:
 
 ofs_005_D66A_03:
 ; con_sfx_0_03
+
 C - - J - - 0x00567A 01:D66A: 20 AC D2  JSR sub_D2AC
 C - - - - - 0x00567D 01:D66D: D0 0A     BNE bra_D679_RTS
 loc_D66F:
 bra_D66F:
+; NEA SFX 04 (Virus kill)
+                                        LDA #$FF
+                                        STA $4104
+                                        LDA #$04
+                                        STA $4106
 C D 2 - - - 0x00567F 01:D66F: A9 00     LDA #$00
 C - - - - - 0x005681 01:D671: 8D F8 06  STA ram_06F8_sfx_0
 C - - - - - 0x005684 01:D674: A9 10     LDA #$10
@@ -12597,11 +12652,11 @@ bra_DA58:
 - - - - - - 0x005A68 01:DA58: 8D 13 40  STA $4013
 - - - - - - 0x005A6B 01:DA5B: 8C 12 40  STY $4012
 - - - - - - 0x005A6E 01:DA5E: 8E 10 40  STX $4010
-- - - - - - 0x005A71 01:DA61: A9 0F     LDA #$0F
+- - - - - - 0x005A71 01:DA61: A9 0F     LDA #%00000000
 - - - - - - 0x005A73 01:DA63: 8D 15 40  STA $4015
 - - - - - - 0x005A76 01:DA66: A9 00     LDA #$00
 - - - - - - 0x005A78 01:DA68: 8D 11 40  STA $4011
-- - - - - - 0x005A7B 01:DA6B: A9 1F     LDA #$1F
+- - - - - - 0x005A7B 01:DA6B: A9 1F     LDA #%00000000
 - - - - - - 0x005A7D 01:DA6D: 8D 15 40  STA $4015
 - - - - - - 0x005A80 01:DA70: 60        RTS
 
@@ -12732,6 +12787,7 @@ C - - - - - 0x005B19 01:DB09: F0 E2     BEQ bra_DAED_06
 loc_DB0B:
 C D 2 - - - 0x005B1B 01:DB0B: 85 EF     STA ram_00EF_music
 C - - - - - 0x005B1D 01:DB0D: 8D CC 06  STA ram_06CC_music
+                                        JSR NEA_PlayMusic
 C - - - - - 0x005B20 01:DB10: CE CC 06  DEC ram_06CC_music
 C - - - - - 0x005B23 01:DB13: B9 2D DB  LDA tbl_DB2D,Y
 C - - - - - 0x005B26 01:DB16: 8D 7E 06  STA ram_067E
@@ -13618,11 +13674,11 @@ C - - - - - 0x006005 01:DFF5: AD F7 06  LDA ram_06F7
 C - - - - - 0x006008 01:DFF8: D0 14     BNE bra_E00E_RTS
 C - - - - - 0x00600A 01:DFFA: A5 E1     LDA ram_00E1_t01
 C - - - - - 0x00600C 01:DFFC: 8D 10 40  STA $4010
-- - - - - - 0x00600F 01:DFFF: A9 0F     LDA #$0F
+- - - - - - 0x00600F 01:DFFF: A9 0F     LDA #%00000000
 C - - - - - 0x006011 01:E001: 8D 15 40  STA $4015
 C - - - - - 0x006014 01:E004: A9 00     LDA #$00
 C - - - - - 0x006016 01:E006: 8D 11 40  STA $4011
-C - - - - - 0x006019 01:E009: A9 1F     LDA #$1F
+C - - - - - 0x006019 01:E009: A9 1F     LDA #%00000000
 C - - - - - 0x00601B 01:E00B: 8D 15 40  STA $4015
 bra_E00E_RTS:
 C - - - - - 0x00601E 01:E00E: 60        RTS
@@ -21229,19 +21285,38 @@ C - - - - - 0x007F3A 01:FF2A: 20 08 B9  JSR sub_B908_set_prg_bank
 C - - - - - 0x007F3D 01:FF2D: 4C 00 80  JMP loc_8000_reset_init
 
 
-; bzk garbage
-- - - - - - 0x007F40 01:FF30: 00        .byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00   ; 
-- - - - - - 0x007F50 01:FF40: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x007F60 01:FF50: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x007F70 01:FF60: 00        .byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00   ; 
-- - - - - - 0x007F80 01:FF70: 00        .byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00   ; 
-- - - - - - 0x007F90 01:FF80: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x007FA0 01:FF90: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x007FB0 01:FFA0: 00        .byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00   ; 
-- - - - - - 0x007FC0 01:FFB0: 00        .byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00   ; 
-- - - - - - 0x007FD0 01:FFC0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+NEA_PlayMusic:
+    ; A = music ID (con_music_00–0D)
+    ; Preserve registers
+    PHA
+    TXA
+    PHA
+    TYA
+    PHA
 
+    PLA          ; restore Y, but we only needed its value intact
+    TAY
+    PLA
+    TAX
+    PLA          ; A = music ID again
 
+    ; --- Simple rule: album = music ID, track = 1 ---
+
+    STA $4104    ; Album = music ID (0–13)
+    LDA #$01
+    STA $4105    ; Play BGM: track 1 of that album
+    LDA #60      ; set volume to BGM
+    STA $4102    ; write to BGM volume
+    LDA #$FF     ; set volume to SFX
+    STA $4103    ; write to SFX volume
+
+    ; Optional: force looping ON for everything.
+    ; (You can get fancy later and disable loop for win jingles.)
+    LDA #$01
+    STA $4100    ; loop flag = on
+    LDA #%00000000
+    STA $4015
+    RTS
 
 sub_FFD0:
 ; bzk optimize
