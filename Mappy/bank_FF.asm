@@ -1014,6 +1014,7 @@ C - - - - - 0x0004D3 00:C4C3: 4C D1 C3  JMP loc_C3D1
 
 
 ofs_000_C4C6_08_sound_wave:
+
 C - - J - - 0x0004D6 00:C4C6: A5 21     LDA ram_frm_cnt
 C - - - - - 0x0004D8 00:C4C8: 4A        LSR
 C - - - - - 0x0004D9 00:C4C9: 29 03     AND #$03
@@ -3395,7 +3396,7 @@ _off007_D2D9_06:
 - D 2 - I - 0x00135C 00:D34C: 16 27     .word $2716 ; 
 - D 2 - I - 0x00135E 00:D34E: B6 27     .word $27B6 ; 
 _off007_D350_08:
-- D 2 - I - 0x001360 00:D350: 00        .byte $00   ; end token
+;- D 2 - I - 0x001360 00:D350: 00        .byte $00   ; end token
 
 
 
@@ -3779,6 +3780,8 @@ loc_D4BE:
 C D 2 - - - 0x0014CE 00:D4BE: 85 19     STA ram_0019_t01
 bra_D4C0_loop:
 C - - - - - 0x0014D0 00:D4C0: A4 19     LDY ram_0019_t01
+; NEA SFX (GET)
+                                       JSR nea_sfx_hook 
 C - - - - - 0x0014D2 00:D4C2: 20 CA D4  JSR sub_D4CA
 C - - - - - 0x0014D5 00:D4C5: C6 18     DEC ram_0018_t03_loop_counter
 C - - - - - 0x0014D7 00:D4C7: D0 F7     BNE bra_D4C0_loop
@@ -3803,8 +3806,6 @@ C - - - - - 0x0014EC 00:D4DC: 85 13     STA ram_0012_t03_data + $01
 C - - - - - 0x0014EE 00:D4DE: A2 74     LDX #< ram_p1_score_000000xx
 C - - - - - 0x0014F0 00:D4E0: A0 03     LDY #$03
 C - - - - - 0x0014F2 00:D4E2: 4C 02 D5  JMP loc_D502
-
-
 
 sub_D4E5_increase_counter:
 loc_D4E5_increase_counter:
@@ -5108,10 +5109,14 @@ C - - - - - 0x001B64 00:DB54: 60        RTS
 
 
 ofs_001_DB55_2A:
+; NEA SFX ( DEAD)
+                                        JSR nea_sfx_hook
 C - - J - - 0x001B65 00:DB55: AD A5 04  LDA ram_obj_2_type
 C - - - - - 0x001B68 00:DB58: 0D AD 04  ORA ram_obj_2_type + $08
 C - - - - - 0x001B6B 00:DB5B: D0 1D     BNE bra_DB7A_RTS    ; if something
 ; if both nothing
+
+
 C - - - - - 0x001B6D 00:DB5D: 20 BF F4  JSR sub_F4BF
 C - - - - - 0x001B70 00:DB60: A9 01     LDA #$01
 C - - - - - 0x001B72 00:DB62: 8D 0B 06  STA ram_sfx_060B
@@ -5181,6 +5186,8 @@ C - - - - - 0x001BD0 00:DBC0: 86 18     STX ram_0018_t05_save_X
 C - - - - - 0x001BD2 00:DBC2: A5 42     LDA ram_demo_flag
 C - - - - - 0x001BD4 00:DBC4: 8D 0A 06  STA ram_sfx_060A
 C - - - - - 0x001BD7 00:DBC7: A0 3C     LDY #$3C
+; NEA SFX (JUMP)
+                                        JSR nea_sfx_hook 
 C - - - - - 0x001BD9 00:DBC9: 20 CA D4  JSR sub_D4CA
 C - - - - - 0x001BDC 00:DBCC: A6 18     LDX ram_0018_t05_save_X
 C - - - - - 0x001BDE 00:DBCE: BD 02 02  LDA ram_obj_5_strength,X
@@ -5544,8 +5551,6 @@ C - - J - - 0x001E35 00:DE25: CE 27 04  DEC ram_obj_1_timer + con_ofs_obj + $20
 C - - - - - 0x001E38 00:DE28: D0 FA     BNE bra_DE24_RTS
 bra_DE2A:
 C - - - - - 0x001E3A 00:DE2A: 4C 17 DD  JMP loc_DD17
-
-
 
 ofs_001_DE2D_1E:
 C - - J - - 0x001E3D 00:DE2D: CE 27 04  DEC ram_obj_1_timer + con_ofs_obj + $20
@@ -6182,8 +6187,10 @@ C - - - - - 0x0021CA 00:E1BA: B1 1E     LDA (ram_001E_t04_object_data),Y
 C - - - - - 0x0021CC 00:E1BC: D0 23     BNE bra_E1E1    ; if not player
 ; if player
 C - - - - - 0x0021CE 00:E1BE: 86 18     STX ram_0018_t06_save_X
+
 C - - - - - 0x0021D0 00:E1C0: A9 01     LDA #$01
 C - - - - - 0x0021D2 00:E1C2: 8D 0A 06  STA ram_sfx_060A
+
 C - - - - - 0x0021D5 00:E1C5: A0 3C     LDY #$3C
 C - - - - - 0x0021D7 00:E1C7: 20 CA D4  JSR sub_D4CA
 C - - - - - 0x0021DA 00:E1CA: A6 18     LDX ram_0018_t06_save_X
@@ -7207,8 +7214,9 @@ C - - - - - 0x002797 00:E787: 60        RTS
 
 
 ; bzk garbage
-- - - - - - 0x002798 00:E788: 02        .byte $02, $02, $00, $02, $02, $02, $00, $02   ; 
-- - - - - - 0x0027A0 00:E790: 02        .byte $02, $02, $00, $02, $02, $02, $00, $02   ; 
+; NEA DELETED SPACE
+;- - - - - - 0x002798 00:E788: 02        .byte $02, $02, $00, $02, $02, $02, $00, $02   ; 
+;- - - - - - 0x0027A0 00:E790: 02        .byte $02, $02, $00, $02, $02, $02, $00, $02   ; 
 
 
 
@@ -8318,8 +8326,10 @@ C - - - - - 0x002D7D 00:ED6D: B0 A3     BCS bra_ED12_score_points
 ; if sound wave
 C - - - - - 0x002D7F 00:ED6F: A5 42     LDA ram_demo_flag
 C - - - - - 0x002D81 00:ED71: 8D 09 06  STA ram_sfx_0609
+
 C - - - - - 0x002D84 00:ED74: 20 77 EE  JSR sub_EE77
 C - - - - - 0x002D87 00:ED77: 20 C9 EE  JSR sub_EEC9
+
 C - - - - - 0x002D8A 00:ED7A: A9 08     LDA #con_anim_id_sound_wave
 C - - - - - 0x002D8C 00:ED7C: A0 04     LDY #con_obj_animation
 C - - - - - 0x002D8E 00:ED7E: 91 1E     STA (ram_001E_t04_object_data),Y
@@ -8423,6 +8433,9 @@ C - - - - - 0x002E22 00:EE12: D0 F2     BNE bra_EE06_loop
 bra_EE15:
 C - - - - - 0x002E25 00:EE15: A9 01     LDA #$01    ; sound wave
 C - - - - - 0x002E27 00:EE17: 99 A5 04  STA ram_obj_2_type,Y
+; NEA SFX Soundwave
+                                        LDA #10         ; NEA SFX
+                                        STA $4106       ; album 255 = SFX
 C - - - - - 0x002E2A 00:EE1A: A9 00     LDA #$00
 C - - - - - 0x002E2C 00:EE1C: 99 A0 04  STA ram_obj_2_pos_X_fr,Y
 C - - - - - 0x002E2F 00:EE1F: 99 A2 04  STA ram_obj_2_pos_Y_fr,Y
@@ -9890,37 +9903,38 @@ C - - - - - 0x00370F 00:F6FF: 4C 36 F6  JMP loc_F636_next_byte
 
 
 
+;disable for NEA
 ofs_005_F702_EB:
 ; con_se_cb_EB
 ; bzk garbage
-- - - - - - 0x003712 00:F702: 20 0B F8  JSR sub_F80B_read_sound_data
-- - - - - - 0x003715 00:F705: 85 F6     STA $F6 ; ram_00F6_se_temp
-- - - - - - 0x003717 00:F707: A0 01     LDY #$01
-- - - - - - 0x003719 00:F709: B1 F0     LDA (ram_00F0_se_t03_data),Y
-- - - - - - 0x00371B 00:F70B: 29 F0     AND #$F0
-- - - - - - 0x00371D 00:F70D: 05 F6     ORA $F6 ; ram_00F6_se_temp
-- - - - - - 0x00371F 00:F70F: 91 F0     STA (ram_00F0_se_t03_data),Y
-- - - - - - 0x003721 00:F711: 4C 36 F6  JMP loc_F636_next_byte
+;- - - - - - 0x003712 00:F702: 20 0B F8  JSR sub_F80B_read_sound_data
+;- - - - - - 0x003715 00:F705: 85 F6     STA $F6 ; ram_00F6_se_temp
+;- - - - - - 0x003717 00:F707: A0 01     LDY #$01
+;- - - - - - 0x003719 00:F709: B1 F0     LDA (ram_00F0_se_t03_data),Y
+;- - - - - - 0x00371B 00:F70B: 29 F0     AND #$F0
+;- - - - - - 0x00371D 00:F70D: 05 F6     ORA $F6 ; ram_00F6_se_temp
+;- - - - - - 0x00371F 00:F70F: 91 F0     STA (ram_00F0_se_t03_data),Y
+;- - - - - - 0x003721 00:F711: 4C 36 F6  JMP loc_F636_next_byte
 
 
-
+; disable for NEA
 ofs_005_F714_EC:
 ; con_se_cb_EC
 ; bzk garbage
-- - - - - - 0x003724 00:F714: 20 0B F8  JSR sub_F80B_read_sound_data
-- - - - - - 0x003727 00:F717: A0 02     LDY #$02
-- - - - - - 0x003729 00:F719: 91 F0     STA (ram_00F0_se_t03_data),Y
-- - - - - - 0x00372B 00:F71B: 4C 36 F6  JMP loc_F636_next_byte
+;- - - - - - 0x003724 00:F714: 20 0B F8  JSR sub_F80B_read_sound_data
+;- - - - - - 0x003727 00:F717: A0 02     LDY #$02
+;- - - - - - 0x003729 00:F719: 91 F0     STA (ram_00F0_se_t03_data),Y
+;- - - - - - 0x00372B 00:F71B: 4C 36 F6  JMP loc_F636_next_byte
 
 
-
+;disable for NEA
 ofs_005_F71E_ED:
 ; con_se_cb_ED
 ; bzk garbage
-- - - - - - 0x00372E 00:F71E: 20 0B F8  JSR sub_F80B_read_sound_data
-- - - - - - 0x003731 00:F721: A0 04     LDY #$04
-- - - - - - 0x003733 00:F723: 91 F0     STA (ram_00F0_se_t03_data),Y
-- - - - - - 0x003735 00:F725: 4C 36 F6  JMP loc_F636_next_byte
+;- - - - - - 0x00372E 00:F71E: 20 0B F8  JSR sub_F80B_read_sound_data
+;- - - - - - 0x003731 00:F721: A0 04     LDY #$04
+;- - - - - - 0x003733 00:F723: 91 F0     STA (ram_00F0_se_t03_data),Y
+;- - - - - - 0x003735 00:F725: 4C 36 F6  JMP loc_F636_next_byte
 
 
 
@@ -12148,9 +12162,29 @@ tbl_FFE1:
 - D 3 - - - 0x004007 00:FFF7: 99        .byte $99   ; 16 
 - D 3 - - - 0x004008 00:FFF8: FF        .byte $FF   ; 17 
 - - - - - - 0x004009 00:FFF9: FF        .byte $FF   ; 18 
+;-----------------------------------------
+; nea_sfx_hook
+; in:  Y = SFX ID
+; out: writes NEA SFX command to $4104/$4106
+; preserves: Y, X; A restored for safety
+;-----------------------------------------
+nea_sfx_hook:
+                    PHA             ; save A (safety)
+                                    ;    LDA #$FF
+                                    ;    STA $4103       ; album 1 = SFX
+                    LDA ram_demo_flag   ; $0042
+                    BEQ NEA_SFX_Skip   ; 0 = demo → skip NEA
+                    LDA #$FF
+                    STA $4104       ; album 255 = SFX
+                    TYA             ; A = SFX ID
+                    STA $4106       ; track = SFX ID
+                    NEA_SFX_Skip:
+                    LDA #%00000000
+                    STA $4015
+                    PLA             ; restore A
+                    RTS
 
-
-
+;---------------------------------------------------------------------------------
 .out .sprintf("Free bytes in bank FF: 0x%04X [%d]", ($FFFA - *), ($FFFA - *))
 
 
