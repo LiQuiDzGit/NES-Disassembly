@@ -547,7 +547,10 @@ ram_p1_0077                             = $0077 ; 000299 0002C0 0002D4 0002F9 00
 ; ram_0078                              = $0078 ; 0002F9 0008D9 000909 000AA9 000AAF 
 ; ram_0079                              = $0079 ; 0002F9 0008D9 000909 000AA9 000AAF 
 
-
+ram_start_A_option                      = $0078
+; --- Joypad buttons ---
+ram_btn_A      = $0021   ; A button state (bit0=new press, bit1=hold)
+ram_btn_B      = $0022   ; B button state
 
 ; current round id
 ; bonus rounds = 02 06 0A 0E

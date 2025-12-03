@@ -1745,13 +1745,25 @@ C - - - - - 0x0008A3 00:C893: 20 3E CD  JSR sub_CD3E
 C - - - - - 0x0008A6 00:C896: EA        NOP
 C - - - - - 0x0008A7 00:C897: EA        NOP
 C - - - - - 0x0008A8 00:C898: EA        NOP
+
+
+
 C - - - - - 0x0008A9 00:C899: 20 3E D7  JSR sub_D73E
 C - - - - - 0x0008AC 00:C89C: A5 25     LDA ram_btn_Start
 C - - - - - 0x0008AE 00:C89E: 29 03     AND #$03
 C - - - - - 0x0008B0 00:C8A0: C9 01     CMP #$01
 C - - - - - 0x0008B2 00:C8A2: F0 07     BEQ bra_C8AB_start_was_pressed
+ ; --- NEW: A button on start screen → cycle $0079 (1–2–3–1…) ---
+; NEA SELECT
+    LDA ram_btn_AB      ; A/B button latch
+    AND #$03            ; edge detection style, like at D762
+    CMP #$01            ; 01 = newly pressed this frame
+    BNE Title_NoA
+    JSR MenuA_CycleOption
+Title_NoA:
+
+
 ; FREEZ DEMO SCREEN
-                                        NOP
 ;C - - - - - 0x0008B4 00:C8A4: C6 0F    DEC ram_000E_timer + $01
 C - - - - - 0x0008B6 00:C8A6: D0 E8     BNE bra_C890_loop
 C - - - - - 0x0008B8 00:C8A8: 4C 65 FF  JMP loc_FF65
@@ -1870,7 +1882,7 @@ C - - - - - 0x000999 00:C989: C9 78     CMP #$78
 C - - - - - 0x00099B 00:C98B: D0 08     BNE bra_C995
 ;NEA BGM NEXT
                                         LDA #$09        ; NEA track ID for "stage clear" (example)
-                                        STA $4105       ; NEA: play BGM track $09 on current album
+                                        STA $4105       ; NEA: play BGM track $02 on current album
 ;C - - - - - 0x00099D 00:C98D: A9 01     LDA #$01
 ;C - - - - - 0x00099F 00:C98F: 8D 11 06  STA ram_sfx_0611
 ;C - - - - - 0x0009A2 00:C992: 8D 12 06  STA ram_sfx_0612
@@ -4384,6 +4396,8 @@ C - - - - - 0x00174E 00:D73E: A5 24     LDA ram_btn_Select
 C - - - - - 0x001750 00:D740: 29 03     AND #$03
 C - - - - - 0x001752 00:D742: C9 01     CMP #$01
 C - - - - - 0x001754 00:D744: D0 0A     BNE bra_D750
+
+
 C - - - - - 0x001756 00:D746: A9 F0     LDA #$F0
 C - - - - - 0x001758 00:D748: 85 0F     STA ram_000E_timer + $01
 C - - - - - 0x00175A 00:D74A: A5 4A     LDA ram_004A
@@ -4404,15 +4418,15 @@ C - - - - - 0x00176F 00:D75F: 4C 7A D7  JMP loc_D77A
 
 
 ; bzk garbage
-- - - - - - 0x001772 00:D762: A5 22     LDA ram_btn_AB
-- - - - - - 0x001774 00:D764: 29 03     AND #$03
-- - - - - - 0x001776 00:D766: C9 01     CMP #$01
-- - - - - - 0x001778 00:D768: D0 0A     BNE bra_D774
-- - - - - - 0x00177A 00:D76A: A9 F0     LDA #$F0
-- - - - - - 0x00177C 00:D76C: 85 0F     STA ram_000E_timer + $01
-- - - - - - 0x00177E 00:D76E: A5 2E     LDA ram_002E_useless_00
-- - - - - - 0x001780 00:D770: 49 01     EOR #$01
-- - - - - - 0x001782 00:D772: 85 2E     STA ram_002E_useless_00
+;NEA DELETED- - - - - - 0x001772 00:D762: A5 22     LDA ram_btn_AB
+;NEA DELETED- - - - - - 0x001774 00:D764: 29 03     AND #$03
+;NEA DELETED- - - - - - 0x001776 00:D766: C9 01     CMP #$01
+;NEA DELETED- - - - - - 0x001778 00:D768: D0 0A     BNE bra_D774
+;NEA DELETED- - - - - - 0x00177A 00:D76A: A9 F0     LDA #$F0
+;NEA DELETED- - - - - - 0x00177C 00:D76C: 85 0F     STA ram_000E_timer + $01
+;NEA DELETED- - - - - - 0x00177E 00:D76E: A5 2E     LDA ram_002E_useless_00
+;NEA DELETED- - - - - - 0x001780 00:D770: 49 01     EOR #$01
+;NEA DELETED- - - - - - 0x001782 00:D772: 85 2E     STA ram_002E_useless_00
 bra_D774:
 - - - - - - 0x001784 00:D774: A5 2E     LDA ram_002E_useless_00
 - - - - - - 0x001786 00:D776: 0A        ASL
@@ -4453,7 +4467,18 @@ C - - - - - 0x0017B6 00:D7A6: C6 12     DEC ram_0012_t09_tiles_counter
 C - - - - - 0x0017B8 00:D7A8: D0 F5     BNE bra_D79F_loop
 C - - - - - 0x0017BA 00:D7AA: 86 2A     STX ram_buffer_index_1
 C - - - - - 0x0017BC 00:D7AC: 60        RTS
-
+; NEA SELECT
+MenuA_CycleOption:          ; 
+    LDA $0079               ; current value (00–02)
+    CLC
+    ADC #$01                ; ++
+    CMP #$03                ; reached 3?
+    BCC MenuA_Store         ; if <3, keep value
+    LDA #$00                ; else wrap back to 1
+MenuA_Store:
+    STA $0079               ; save new value
+    LDA #$01                ; RESTORE "A" VALUE (so demo not start)
+    RTS
 
 
 tbl_D7AD:
@@ -5118,8 +5143,6 @@ C - - - - - 0x001B64 00:DB54: 60        RTS
 
 
 ofs_001_DB55_2A:
-; NEA SFX ( DEAD)
-;                                        JSR nea_sfx_hook
 ; NEA BGM ( DEAD ) 
 
                                         LDA #05
@@ -6468,7 +6491,7 @@ C - - - - - 0x00237E 00:E36E: C8        INY
 C - - - - - 0x00237F 00:E36F: 85 80     STA ram_p1_0080
 C - - - - - 0x002381 00:E371: A2 00     LDX #$00
 ; NEA BGM ( LEVEL START ) 
-                                        LDA #255   ; 0–13 album
+                                        LDA $0079   ; 0–13 album
                                         STA $4104            ; NEA album = stage BGM
                                         LDA #$03
                                         STA $4105            ; play track 1
@@ -12141,6 +12164,7 @@ bra_FFBC_loop:
 C - - - - - 0x003FCC 00:FFBC: 20 41 C1  JSR sub_C141
 C - - - - - 0x003FCF 00:FFBF: 20 60 CB  JSR sub_CB60
 C - - - - - 0x003FD2 00:FFC2: 20 E6 F2  JSR sub_F2E6
+
 C - - - - - 0x003FD5 00:FFC5: A5 4F     LDA ram_004F_flag
 C - - - - - 0x003FD7 00:FFC7: 05 4B     ORA ram_004B_flag
 C - - - - - 0x003FD9 00:FFC9: D0 10     BNE bra_FFDB
@@ -12196,7 +12220,7 @@ nea_sfx_hook:
                                     ;    STA $4103       ; album 1 = SFX
                     LDA ram_demo_flag   ; $0042
                     BEQ NEA_SFX_Skip   ; 0 = demo → skip NEA
-                    LDA #$FF
+                    LDA $0079
                     STA $4104       ; album 255 = SFX
                     TYA             ; A = SFX ID
                     STA $4106       ; track = SFX ID
