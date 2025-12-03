@@ -512,6 +512,7 @@ C - - - - - 0x0002C2 00:C2B2: 60        RTS
 
 sub_C2B3_save_data_and_score_before_clearing_memory:
 ; bzk optimize, proper LDAs without X, put LDX 05 before 0x0002D9
+
 C - - - - - 0x0002C3 00:C2B3: A2 01     LDX #$01
 C - - - - - 0x0002C5 00:C2B5: A5 40     LDA ram_game_mode
 C - - - - - 0x0002C7 00:C2B7: 95 00     STA ram_0001_t01_save_buffer - $01,X
@@ -1749,7 +1750,9 @@ C - - - - - 0x0008AC 00:C89C: A5 25     LDA ram_btn_Start
 C - - - - - 0x0008AE 00:C89E: 29 03     AND #$03
 C - - - - - 0x0008B0 00:C8A0: C9 01     CMP #$01
 C - - - - - 0x0008B2 00:C8A2: F0 07     BEQ bra_C8AB_start_was_pressed
-C - - - - - 0x0008B4 00:C8A4: C6 0F     DEC ram_000E_timer + $01
+; FREEZ DEMO SCREEN
+                                        NOP
+;C - - - - - 0x0008B4 00:C8A4: C6 0F    DEC ram_000E_timer + $01
 C - - - - - 0x0008B6 00:C8A6: D0 E8     BNE bra_C890_loop
 C - - - - - 0x0008B8 00:C8A8: 4C 65 FF  JMP loc_FF65
 bra_C8AB_start_was_pressed:
@@ -1865,9 +1868,12 @@ C - - - - - 0x000994 00:C984: 20 41 C1  JSR sub_C141
 C - - - - - 0x000997 00:C987: A5 0F     LDA ram_000E_timer + $01
 C - - - - - 0x000999 00:C989: C9 78     CMP #$78
 C - - - - - 0x00099B 00:C98B: D0 08     BNE bra_C995
-C - - - - - 0x00099D 00:C98D: A9 01     LDA #$01
-C - - - - - 0x00099F 00:C98F: 8D 11 06  STA ram_sfx_0611
-C - - - - - 0x0009A2 00:C992: 8D 12 06  STA ram_sfx_0612
+;NEA BGM NEXT
+                                        LDA #$09        ; NEA track ID for "stage clear" (example)
+                                        STA $4105       ; NEA: play BGM track $09 on current album
+;C - - - - - 0x00099D 00:C98D: A9 01     LDA #$01
+;C - - - - - 0x00099F 00:C98F: 8D 11 06  STA ram_sfx_0611
+;C - - - - - 0x0009A2 00:C992: 8D 12 06  STA ram_sfx_0612
 bra_C995:
 C - - - - - 0x0009A5 00:C995: 20 60 CB  JSR sub_CB60
 C - - - - - 0x0009A8 00:C998: C6 0F     DEC ram_000E_timer + $01
@@ -1951,6 +1957,9 @@ C - - - - - 0x000A43 00:CA33: A5 40     LDA ram_game_mode
 C - - - - - 0x000A45 00:CA35: D0 0A     BNE bra_CA41_2_players
 - - - - - - 0x000A47 00:CA37: A5 70     LDA ram_p1_lives
 - - - - - - 0x000A49 00:CA39: D0 2C     BNE bra_CA67
+; NEA ( GAME OVER)
+                                        LDA #07
+                                        STA $4105            ; play track 7
 - - - - - - 0x000A4B 00:CA3B: 20 C3 CA  JSR sub_CAC3
 - - - - - - 0x000A4E 00:CA3E: 4C 4F C8  JMP loc_C84F
 bra_CA41_2_players:
@@ -2642,8 +2651,8 @@ C - - - - - 0x000EF5 00:CEE5: 4C FB C6  JMP loc_C6FB_write_data_to_buffer
 
 
 ; bzk garbage
-- - - - - - 0x000EF8 00:CEE8: A2 00     LDX #$00
-- - - - - - 0x000EFA 00:CEEA: A9 00     LDA #$00
+; NEA DELETE- - - - - - 0x000EF8 00:CEE8: A2 00     LDX #$00
+; NEA DELETE- - - - - - 0x000EFA 00:CEEA: A9 00     LDA #$00
 bra_CEEC_loop:
 - - - - - - 0x000EFC 00:CEEC: 95 04     STA ram_0000_temp + $04,X
 - - - - - - 0x000EFE 00:CEEE: E8        INX
@@ -2658,8 +2667,8 @@ bra_CEFB_RTS:
 
 
 ; bzk garbage
-- - - - - - 0x000F0C 00:CEFC: A2 00     LDX #$00
-- - - - - - 0x000F0E 00:CEFE: A9 00     LDA #$00
+;- - - - - - 0x000F0C 00:CEFC: A2 00     LDX #$00
+;- - - - - - 0x000F0E 00:CEFE: A9 00     LDA #$00
 bra_CF00_loop:
 - - - - - - 0x000F10 00:CF00: 95 00     STA ram_0000_temp,X
 - - - - - - 0x000F12 00:CF02: E8        INX
@@ -5110,7 +5119,11 @@ C - - - - - 0x001B64 00:DB54: 60        RTS
 
 ofs_001_DB55_2A:
 ; NEA SFX ( DEAD)
-                                        JSR nea_sfx_hook
+;                                        JSR nea_sfx_hook
+; NEA BGM ( DEAD ) 
+
+                                        LDA #05
+                                        STA $4105            ; play track 5
 C - - J - - 0x001B65 00:DB55: AD A5 04  LDA ram_obj_2_type
 C - - - - - 0x001B68 00:DB58: 0D AD 04  ORA ram_obj_2_type + $08
 C - - - - - 0x001B6B 00:DB5B: D0 1D     BNE bra_DB7A_RTS    ; if something
@@ -6454,6 +6467,13 @@ C - - - - - 0x00237C 00:E36C: B1 1C     LDA (ram_001C_temp),Y
 C - - - - - 0x00237E 00:E36E: C8        INY
 C - - - - - 0x00237F 00:E36F: 85 80     STA ram_p1_0080
 C - - - - - 0x002381 00:E371: A2 00     LDX #$00
+; NEA BGM ( LEVEL START ) 
+                                        LDA #255   ; 0–13 album
+                                        STA $4104            ; NEA album = stage BGM
+                                        LDA #$03
+                                        STA $4105            ; play track 1
+                                        LDA #%00000000 ;(Silence)
+                                        STA $4015
 bra_E373_loop:
 C - - - - - 0x002383 00:E373: A9 00     LDA #$00
 C - - - - - 0x002385 00:E375: 9D 00 02  STA ram_obj_5_0200,X
@@ -6482,6 +6502,8 @@ C - - - - - 0x0023B6 00:E3A6: AA        TAX
 C - - - - - 0x0023B7 00:E3A7: E4 80     CPX ram_p1_0080
 C - - - - - 0x0023B9 00:E3A9: D0 C8     BNE bra_E373_loop
 C - - - - - 0x0023BB 00:E3AB: A2 00     LDX #$00
+
+
 bra_E3AD_loop:
 C - - - - - 0x0023BD 00:E3AD: 86 1B     STX ram_001B_temp
 C - - - - - 0x0023BF 00:E3AF: 20 27 E4  JSR sub_E427
@@ -12179,10 +12201,9 @@ nea_sfx_hook:
                     TYA             ; A = SFX ID
                     STA $4106       ; track = SFX ID
                     NEA_SFX_Skip:
-                    LDA #%00000000
-                    STA $4015
                     PLA             ; restore A
                     RTS
+;-----------------------------------------------------------------------------
 
 ;---------------------------------------------------------------------------------
 .out .sprintf("Free bytes in bank FF: 0x%04X [%d]", ($FFFA - *), ($FFFA - *))
