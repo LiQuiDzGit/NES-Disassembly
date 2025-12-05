@@ -173,9 +173,6 @@ C - - - - - 0x0000D7 00:C0C7: E6 21     INC ram_frm_cnt
 C - - - - - 0x0000D9 00:C0C9: A9 00     LDA #$00
 C D 2 - - - 0x0000DB 00:C0CB: 85 20     STA ram_nmi_trigger_flag
 C D 2 - - - 0x0000DD 00:C0CD: 4C 6D C0  JMP loc_C06D_main_game_script_loop
-
-
-
 sub_C0D0:
 C D 2 - - - 0x0000E0 00:C0D0: A2 00     LDX #$00
 C - - - - - 0x0000E2 00:C0D2: A5 23     LDA ram_0023_flag
@@ -229,8 +226,6 @@ C - - - - - 0x00012E 00:C11E: E8        INX
 C - - - - - 0x00012F 00:C11F: E8        INX
 C - - - - - 0x000130 00:C120: D0 F7     BNE bra_C119_hide_all_sprites_loop
 C - - - - - 0x000132 00:C122: 60        RTS
-
-
 
 tbl_C123_spr_T:
 - D 2 - - - 0x000133 00:C123: D0        .byte $D0   ; 00 
@@ -539,7 +534,6 @@ C - - - - - 0x0002C2 00:C2B2: 60        RTS
 
 sub_C2B3_save_data_and_score_before_clearing_memory:
 ; bzk optimize, proper LDAs without X, put LDX 05 before 0x0002D9
-
 C - - - - - 0x0002C3 00:C2B3: A2 01     LDX #$01
 C - - - - - 0x0002C5 00:C2B5: A5 40     LDA ram_game_mode
 C - - - - - 0x0002C7 00:C2B7: 95 00     STA ram_0001_t01_save_buffer - $01,X
@@ -1780,18 +1774,16 @@ C - - - - - 0x0008AC 00:C89C: A5 25     LDA ram_btn_Start
 C - - - - - 0x0008AE 00:C89E: 29 03     AND #$03
 C - - - - - 0x0008B0 00:C8A0: C9 01     CMP #$01
 C - - - - - 0x0008B2 00:C8A2: F0 07     BEQ bra_C8AB_start_was_pressed
- ; --- NEW: A button on start screen → cycle $0079 (1–2–3–1…) ---
-; NEA SELECT
-    LDA ram_btn_AB      ; A/B button latch
-    AND #$03            ; edge detection style, like at D762
-    CMP #$01            ; 01 = newly pressed this frame
-    BNE Title_NoA
-    JSR MenuA_CycleOption
-Title_NoA:
-
-
-; FREEZ DEMO SCREEN
-;C - - - - - 0x0008B4 00:C8A4: C6 0F    DEC ram_000E_timer + $01
+; NEA  ALBUM SELECT
+;                                                           ; --- NEW: A/B button on start screen → cycle $0079 (1–2–3–1…) ---
+                                        LDA ram_btn_AB      ; A/B button latch
+                                        AND #$03            ; edge detection style, like at D762
+                                        CMP #$01            ; 01 = newly pressed this frame
+                                        BNE Title_NoA
+                                        JSR MenuA_CycleOption
+                                        Title_NoA:
+;;;; FREEZE DEMO SCREEN TIME
+;;;;C - - - - - 0x0008B4 00:C8A4: C6 0F    DEC ram_000E_timer + $01
 C - - - - - 0x0008B6 00:C8A6: D0 E8     BNE bra_C890_loop
 C - - - - - 0x0008B8 00:C8A8: 4C 65 FF  JMP loc_FF65
 bra_C8AB_start_was_pressed:
@@ -1907,12 +1899,13 @@ C - - - - - 0x000994 00:C984: 20 41 C1  JSR sub_C141
 C - - - - - 0x000997 00:C987: A5 0F     LDA ram_000E_timer + $01
 C - - - - - 0x000999 00:C989: C9 78     CMP #$78
 C - - - - - 0x00099B 00:C98B: D0 08     BNE bra_C995
-;NEA BGM NEXT
+; NEA BGM NEXT
                                         LDA #$09        ; NEA track ID for "stage clear" (example)
                                         STA $4105       ; NEA: play BGM track $09 on current album
-;C - - - - - 0x00099D 00:C98D: A9 01     LDA #$01
-;C - - - - - 0x00099F 00:C98F: 8D 11 06  STA ram_sfx_0611
-;C - - - - - 0x0009A2 00:C992: 8D 12 06  STA ram_sfx_0612
+;REMOVED
+;C - - - - - 0x00099D 00:C98D: A9 01     LDA #$01               ; REMOVED TO FREE SPACE
+;C - - - - - 0x00099F 00:C98F: 8D 11 06  STA ram_sfx_0611       ; REMOVED TO FREE SPACE
+;C - - - - - 0x0009A2 00:C992: 8D 12 06  STA ram_sfx_0612       ; REMOVED TO FREE SPACE
 bra_C995:
 C - - - - - 0x0009A5 00:C995: 20 60 CB  JSR sub_CB60
 C - - - - - 0x0009A8 00:C998: C6 0F     DEC ram_000E_timer + $01
@@ -1980,10 +1973,8 @@ bra_CA11:
 C - - - - - 0x000A21 00:CA11: A9 1E     LDA #$1E
 C - - - - - 0x000A23 00:CA13: 85 0F     STA ram_000E_timer + $01
 bra_CA15_loop:
-;nea return
-; nea bonus result NEA EARNING
-
-                                        LDA #13        ; NEA track ID for "BONUS STAGE"
+; NEA BONUS RESULT
+                                        LDA #13         ; NEA track ID for "BONUS STAGE"
                                         STA $4105       ; NEA: play BGM track 13 on current album
 C - - - - - 0x000A25 00:CA15: 20 41 C1  JSR sub_C141
 C - - - - - 0x000A28 00:CA18: 20 1C D7  JSR sub_D71C
@@ -2006,8 +1997,8 @@ C - - - - - 0x000A45 00:CA35: D0 0A     BNE bra_CA41_2_players
 - - - - - - 0x000A47 00:CA37: A5 70     LDA ram_p1_lives
 - - - - - - 0x000A49 00:CA39: D0 2C     BNE bra_CA67
 ; NEA ( GAME OVER)
-                                        LDA #07
-                                        STA $4105            ; play track 7
+                                        LDA #07         ; NEA track ID for "GAME OVER"
+                                        STA $4105       ; NEA: play BGM track 07 on current album
 - - - - - - 0x000A4B 00:CA3B: 20 C3 CA  JSR sub_CAC3
 - - - - - - 0x000A4E 00:CA3E: 4C 4F C8  JMP loc_C84F
 bra_CA41_2_players:
@@ -2699,8 +2690,8 @@ C - - - - - 0x000EF5 00:CEE5: 4C FB C6  JMP loc_C6FB_write_data_to_buffer
 
 
 ; bzk garbage
-; NEA DELETE- - - - - - 0x000EF8 00:CEE8: A2 00     LDX #$00
-; NEA DELETE- - - - - - 0x000EFA 00:CEEA: A9 00     LDA #$00
+; NEA DELETE- - - - - - 0x000EF8 00:CEE8: A2 00     LDX #$00     ; REMOVED TO FREE SPACE
+; NEA DELETE- - - - - - 0x000EFA 00:CEEA: A9 00     LDA #$00     ; REMOVED TO FREE SPACE
 bra_CEEC_loop:
 - - - - - - 0x000EFC 00:CEEC: 95 04     STA ram_0000_temp + $04,X
 - - - - - - 0x000EFE 00:CEEE: E8        INX
@@ -2715,8 +2706,8 @@ bra_CEFB_RTS:
 
 
 ; bzk garbage
-;- - - - - - 0x000F0C 00:CEFC: A2 00     LDX #$00
-;- - - - - - 0x000F0E 00:CEFE: A9 00     LDA #$00
+;- - - - - - 0x000F0C 00:CEFC: A2 00     LDX #$00     ; REMOVED TO FREE SPACE
+;- - - - - - 0x000F0E 00:CEFE: A9 00     LDA #$00     ; REMOVED TO FREE SPACE
 bra_CF00_loop:
 - - - - - - 0x000F10 00:CF00: 95 00     STA ram_0000_temp,X
 - - - - - - 0x000F12 00:CF02: E8        INX
@@ -4210,10 +4201,10 @@ _off000_D658_00:
 _off000_D65D_02:
 ; con_D640_02
 ; bzk garbage
-;NEA DELETED- - - - - - 0x00166D 00:D65D: 74 20     .word $2074 ; ppu address
-;NEA DELETED- - - - - - 0x00166F 00:D65F: 71        .byte $71   ; 
-;NEA DELETED- - - - - - 0x001670 00:D660: 04        .byte $04   ; 
-;NEA DELETED- - - - - - 0x001671 00:D661: 06        .byte $06   ; 
+;NEA DELETED- - - - - - 0x00166D 00:D65D: 74 20     .word $2074 ; ppu address      ; REMOVED TO FREE SPACE
+;NEA DELETED- - - - - - 0x00166F 00:D65F: 71        .byte $71   ;      ; REMOVED TO FREE SPACE
+;NEA DELETED- - - - - - 0x001670 00:D660: 04        .byte $04   ;      ; REMOVED TO FREE SPACE
+;NEA DELETED- - - - - - 0x001671 00:D661: 06        .byte $06   ;      ; REMOVED TO FREE SPACE
 
 
 
@@ -4453,7 +4444,7 @@ C - - - - - 0x00176E 00:D75E: A8        TAY
 C - - - - - 0x00176F 00:D75F: 4C 7A D7  JMP loc_D77A
 
 
-; bzk garbage
+; bzk garbage                                     ; REMOVED TO FREE SPACE
 ;NEA DELETED- - - - - - 0x001772 00:D762: A5 22     LDA ram_btn_AB
 ;NEA DELETED- - - - - - 0x001774 00:D764: 29 03     AND #$03
 ;NEA DELETED- - - - - - 0x001776 00:D766: C9 01     CMP #$01
@@ -4503,20 +4494,18 @@ C - - - - - 0x0017B6 00:D7A6: C6 12     DEC ram_0012_t09_tiles_counter
 C - - - - - 0x0017B8 00:D7A8: D0 F5     BNE bra_D79F_loop
 C - - - - - 0x0017BA 00:D7AA: 86 2A     STX ram_buffer_index_1
 C - - - - - 0x0017BC 00:D7AC: 60        RTS
-; NEA SELECT
+; NEA ALBUM SELECT                                              ; NEA AUDIO ALBUM SELECT
 MenuA_CycleOption:          ; 
-    LDA $0079               ; current value (00–02)
-    CLC
-    ADC #$01                ; ++
-    CMP #$04                ; reached 3?
-    BCC MenuA_Store         ; if <3, keep value
-    LDA #$00                ; else wrap back to 1
+                                        LDA $0079               ; current value (00–03)
+                                        CLC
+                                        ADC #$01                ; +1
+                                        CMP #$04                ; reached 3?
+                                        BCC MenuA_Store         ; if <3, keep value
+                                        LDA #$00                ; else wrap back to 0(begening)
 MenuA_Store:
-    STA $0079               ; save new value
-    LDA #$01                ; RESTORE "A" VALUE (so demo not start)
-    RTS
-
-
+                                        STA $0079               ; save new value
+                                        LDA #$01                ; RESTORE "A" VALUE (so demo not start)
+                                        RTS
 tbl_D7AD:
 - D 2 - - - 0x0017BD 00:D7AD: C1 D7     .word _off001_D7C1_00
 - D 2 - - - 0x0017BF 00:D7AF: C7 D7     .word _off001_D7C7_02
@@ -5177,11 +5166,10 @@ bra_DB54_RTS:
 C - - - - - 0x001B64 00:DB54: 60        RTS
 
 
-
 ofs_001_DB55_2A:
 ; NEA BGM ( DEAD ) 
 
-                                        LDA #05
+                                        LDA #05              ; NEA AUDIO BGM
                                         STA $4105            ; play track 5
 C - - J - - 0x001B65 00:DB55: AD A5 04  LDA ram_obj_2_type
 C - - - - - 0x001B68 00:DB58: 0D AD 04  ORA ram_obj_2_type + $08
@@ -5259,7 +5247,7 @@ C - - - - - 0x001BD2 00:DBC2: A5 42     LDA ram_demo_flag
 C - - - - - 0x001BD4 00:DBC4: 8D 0A 06  STA ram_sfx_060A
 C - - - - - 0x001BD7 00:DBC7: A0 3C     LDY #$3C
 ; NEA SFX (JUMP)
-                                        JSR nea_sfx_hook 
+                                        JSR nea_sfx_hook  ; PLAY NEA SFX JUMP (ID 60)
 C - - - - - 0x001BD9 00:DBC9: 20 CA D4  JSR sub_D4CA
 C - - - - - 0x001BDC 00:DBCC: A6 18     LDX ram_0018_t05_save_X
 C - - - - - 0x001BDE 00:DBCE: BD 02 02  LDA ram_obj_5_strength,X
@@ -6529,10 +6517,10 @@ C - - - - - 0x002381 00:E371: A2 00     LDX #$00
 ; NEA BGM ( LEVEL START ) 
                                         LDA $0079   ; LOAD ALBUM # (A/B @ START)
                                         STA $4104   ; NEA album
-                                        LDA #$03  ; SELECT TRACK #03 - BGM START
-                                        STA $4105            ; play track 3
-                                        LDA #%00000000 ;(Silence)
-                                        STA $4015
+                                        LDA #$03    ; SELECT TRACK #03 - BGM START
+                                        STA $4105       ; play track 3 - BGM START
+                                        LDA #%00000000  ; LOAD SILENCE  NES Audio
+                                        STA $4015       ;STORE SILENCE  NES Audio
 bra_E373_loop:
 C - - - - - 0x002383 00:E373: A9 00     LDA #$00
 C - - - - - 0x002385 00:E375: 9D 00 02  STA ram_obj_5_0200,X
@@ -7292,12 +7280,10 @@ C - - - - - 0x002792 00:E782: A9 78     LDA #$78
 C - - - - - 0x002794 00:E784: 8D 27 04  STA ram_obj_1_timer + con_ofs_obj + $20
 bra_E787_RTS:
 C - - - - - 0x002797 00:E787: 60        RTS
-
-
 ; bzk garbage
 ; NEA DELETED SPACE
-;- - - - - - 0x002798 00:E788: 02        .byte $02, $02, $00, $02, $02, $02, $00, $02   ; 
-;- - - - - - 0x0027A0 00:E790: 02        .byte $02, $02, $00, $02, $02, $02, $00, $02   ; 
+;- - - - - - 0x002798 00:E788: 02        .byte $02, $02, $00, $02, $02, $02, $00, $02   ;  DELETED TO FREE SPACE
+;- - - - - - 0x0027A0 00:E790: 02        .byte $02, $02, $00, $02, $02, $02, $00, $02   ;  DELETED TO FREE SPACE
 
 
 
@@ -8514,9 +8500,9 @@ C - - - - - 0x002E22 00:EE12: D0 F2     BNE bra_EE06_loop
 bra_EE15:
 C - - - - - 0x002E25 00:EE15: A9 01     LDA #$01    ; sound wave
 C - - - - - 0x002E27 00:EE17: 99 A5 04  STA ram_obj_2_type,Y
-; NEA SFX Soundwave
-                                        LDA #10         ; NEA SFX
-                                        STA $4106       ; album 255 = SFX
+; NEA SFX Soundwave 
+                                        LDA #10         ; NEA SFX #10 (SOUNDWAVE/MICROWAVE)
+                                        STA $4106       ; Play NEA SFX
 C - - - - - 0x002E2A 00:EE1A: A9 00     LDA #$00
 C - - - - - 0x002E2C 00:EE1C: 99 A0 04  STA ram_obj_2_pos_X_fr,Y
 C - - - - - 0x002E2F 00:EE1F: 99 A2 04  STA ram_obj_2_pos_Y_fr,Y
@@ -9060,7 +9046,7 @@ sub_F13A:
 ; nea bonus
 
                                         LDA #11        ; NEA track ID for "BONUS STAGE"
-                                        STA $4105       ; NEA: play BGM track 11 on current album
+                                        STA $4105      ; NEA: play BGM track 11 
 C - - - - - 0x00314A 00:F13A: A4 7C     LDY ram_p1_bonus_round
 C - - - - - 0x00314C 00:F13C: B9 7F F2  LDA tbl_F281_balloons_positions - $02,Y
 C - - - - - 0x00314F 00:F13F: 85 1C     STA ram_001C_temp
@@ -9933,7 +9919,7 @@ C - - - - - 0x0036B9 00:F6A9: 20 9F F4  JSR sub_F49F_jump_to_pointers_after_jsr
 - D 3 - I - 0x0036BC 00:F6AC: D0 F6     .word ofs_005_F6D0_E8
 - D 3 - I - 0x0036BE 00:F6AE: DE F6     .word ofs_005_F6DE_E9
 - D 3 - I - 0x0036C0 00:F6B0: F0 F6     .word ofs_005_F6F0_EA
-- - - - - - 0x0036C2 00:F6B2: 02 F7     .word ofs_005_F702_EB   ; unused, index doesn't exist
+- - - - - - 0x0036C2 00:F6B2: 02 F7     .word ofs_005_F702_EB   ; unused, index doesn't exist ; nea possible free space
 - - - - - - 0x0036C4 00:F6B4: 14 F7     .word ofs_005_F714_EC   ; unused, index doesn't exist
 - - - - - - 0x0036C6 00:F6B6: 1E F7     .word ofs_005_F71E_ED   ; unused, index doesn't exist
 - D 3 - I - 0x0036C8 00:F6B8: 28 F7     .word ofs_005_F728_EE
@@ -9992,21 +9978,21 @@ C - - - - - 0x00370F 00:F6FF: 4C 36 F6  JMP loc_F636_next_byte
 ofs_005_F702_EB:
 ; con_se_cb_EB
 ; bzk garbage
-;- - - - - - 0x003712 00:F702: 20 0B F8  JSR sub_F80B_read_sound_data
-;- - - - - - 0x003715 00:F705: 85 F6     STA $F6 ; ram_00F6_se_temp
-;- - - - - - 0x003717 00:F707: A0 01     LDY #$01
-;- - - - - - 0x003719 00:F709: B1 F0     LDA (ram_00F0_se_t03_data),Y
-;- - - - - - 0x00371B 00:F70B: 29 F0     AND #$F0
-;- - - - - - 0x00371D 00:F70D: 05 F6     ORA $F6 ; ram_00F6_se_temp
-;- - - - - - 0x00371F 00:F70F: 91 F0     STA (ram_00F0_se_t03_data),Y
-;- - - - - - 0x003721 00:F711: 4C 36 F6  JMP loc_F636_next_byte
+;- - - - - - 0x003712 00:F702: 20 0B F8  JSR sub_F80B_read_sound_data    ; NEA DISABLE TO FREE SPACE
+;- - - - - - 0x003715 00:F705: 85 F6     STA $F6 ; ram_00F6_se_temp      ; NEA DISABLE TO FREE SPACE
+;- - - - - - 0x003717 00:F707: A0 01     LDY #$01                        ; NEA DISABLE TO FREE SPACE
+;- - - - - - 0x003719 00:F709: B1 F0     LDA (ram_00F0_se_t03_data),Y    ; NEA DISABLE TO FREE SPACE
+;- - - - - - 0x00371B 00:F70B: 29 F0     AND #$F0                        ; NEA DISABLE TO FREE SPACE
+;- - - - - - 0x00371D 00:F70D: 05 F6     ORA $F6 ; ram_00F6_se_temp      ; NEA DISABLE TO FREE SPACE
+;- - - - - - 0x00371F 00:F70F: 91 F0     STA (ram_00F0_se_t03_data),Y    ; NEA DISABLE TO FREE SPACE
+;- - - - - - 0x003721 00:F711: 4C 36 F6  JMP loc_F636_next_byte          ; NEA DISABLE TO FREE SPACE
 
 
 ; disable for NEA
 ofs_005_F714_EC:
 ; con_se_cb_EC
 ; bzk garbage
-;- - - - - - 0x003724 00:F714: 20 0B F8  JSR sub_F80B_read_sound_data
+;- - - - - - 0x003724 00:F714: 20 0B F8  JSR sub_F80B_read_sound_data    ; NEA DISABLE TO FREE SPACE
 ;- - - - - - 0x003727 00:F717: A0 02     LDY #$02
 ;- - - - - - 0x003729 00:F719: 91 F0     STA (ram_00F0_se_t03_data),Y
 ;- - - - - - 0x00372B 00:F71B: 4C 36 F6  JMP loc_F636_next_byte
@@ -10016,7 +10002,7 @@ ofs_005_F714_EC:
 ofs_005_F71E_ED:
 ; con_se_cb_ED
 ; bzk garbage
-;- - - - - - 0x00372E 00:F71E: 20 0B F8  JSR sub_F80B_read_sound_data
+;- - - - - - 0x00372E 00:F71E: 20 0B F8  JSR sub_F80B_read_sound_data    ; NEA DISABLE TO FREE SPACE
 ;- - - - - - 0x003731 00:F721: A0 04     LDY #$04
 ;- - - - - - 0x003733 00:F723: 91 F0     STA (ram_00F0_se_t03_data),Y
 ;- - - - - - 0x003735 00:F725: 4C 36 F6  JMP loc_F636_next_byte
@@ -12251,16 +12237,14 @@ tbl_FFE1:
 ;-----------------------------------------
 ; nea_sfx_hook
 ; in:  Y = SFX ID
-; out: writes NEA SFX command to $4104/$4106
-; preserves: Y, X; A restored for safety
 ;-----------------------------------------
 nea_sfx_hook:
-                    PHA             ; save A (safety)
-                    LDA $0079
-                    STA $4104       ; album #
-                    TYA             ; A = SFX ID
+                    PHA             ; save A
+                    LDA $0079       ; NEA ALBUM #
+                    STA $4104       ; NEA ALBUM #
+                    TYA             ; MOVE Y -> A = SFX ID
                     STA $4106       ; track = SFX ID
-                    LDA #%00000000 ;(Silence)
+                    LDA #%00000000  ; MUTE NES ORIGINAL AUDIO
                     STA $4015
                     PLA             ; restore A
                     RTS
