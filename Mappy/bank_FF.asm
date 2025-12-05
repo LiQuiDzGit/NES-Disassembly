@@ -4,6 +4,33 @@
 .org $C000  ; for listing file
 ; 0x000010-0x00400F
 
+; NEA AUDIO BY LIQUIDZ
+;
+; ALBUM:
+;     00 - NES
+;     01 - Sharp X1
+;     02 - PC88
+;     03 - GameGear
+;     04 - NES
+;
+; BGM 03 - MAIN BGM
+; BGM 05 - MISS (HIT)
+; BGM 07 - GAME OVER
+; BGM 09 - NEXT (STAGE COMPLETED)
+; BGM 11 - BONUS ROUND
+; BGM 13 - BONUS RESULTS
+;
+; SFX 00 - GET (ITEM COLLECTED)
+; SFX 04 - GET (ITEM COLLECTED)
+; SFX 08 - GET (ITEM COLLECTED)
+; SFX 12 - GET (ITEM COLLECTED)
+; SFX 16 - GET (ITEM COLLECTED)
+; SFX 60 - JUMP (TRAMPOLINE)
+; SFX 10 - MICROWAVE SFX
+
+
+
+
 
 
 tbl_C000:
@@ -1882,7 +1909,7 @@ C - - - - - 0x000999 00:C989: C9 78     CMP #$78
 C - - - - - 0x00099B 00:C98B: D0 08     BNE bra_C995
 ;NEA BGM NEXT
                                         LDA #$09        ; NEA track ID for "stage clear" (example)
-                                        STA $4105       ; NEA: play BGM track $02 on current album
+                                        STA $4105       ; NEA: play BGM track $09 on current album
 ;C - - - - - 0x00099D 00:C98D: A9 01     LDA #$01
 ;C - - - - - 0x00099F 00:C98F: 8D 11 06  STA ram_sfx_0611
 ;C - - - - - 0x0009A2 00:C992: 8D 12 06  STA ram_sfx_0612
@@ -1918,6 +1945,8 @@ C - - - - - 0x0009E2 00:C9D2: 20 3A F1  JSR sub_F13A
 C - - - - - 0x0009E5 00:C9D5: 20 39 C2  JSR sub_C239_enable_rendering
 C - - - - - 0x0009E8 00:C9D8: 20 0B D8  JSR sub_D80B_write_player_data___2
 C - - - - - 0x0009EB 00:C9DB: 20 C0 D8  JSR sub_D8C0
+
+
 C - - - - - 0x0009EE 00:C9DE: A9 00     LDA #$00
 C - - - - - 0x0009F0 00:C9E0: 85 4B     STA ram_004B_flag
 C - - - - - 0x0009F2 00:C9E2: 85 4F     STA ram_004F_flag
@@ -1925,7 +1954,9 @@ C - - - - - 0x0009F4 00:C9E4: A9 AC     LDA #< $08AC
 C - - - - - 0x0009F6 00:C9E6: 85 0F     STA ram_000E_timer + $01
 C - - - - - 0x0009F8 00:C9E8: A9 08     LDA #> $08AC
 C - - - - - 0x0009FA 00:C9EA: 85 0E     STA ram_000E_timer
+
 bra_C9EC_loop:
+
 C - - - - - 0x0009FC 00:C9EC: 20 41 C1  JSR sub_C141
 C - - - - - 0x0009FF 00:C9EF: 20 7B CB  JSR sub_CB7B
 C - - - - - 0x000A02 00:C9F2: A5 4B     LDA ram_004B_flag
@@ -1949,6 +1980,11 @@ bra_CA11:
 C - - - - - 0x000A21 00:CA11: A9 1E     LDA #$1E
 C - - - - - 0x000A23 00:CA13: 85 0F     STA ram_000E_timer + $01
 bra_CA15_loop:
+;nea return
+; nea bonus result NEA EARNING
+
+                                        LDA #13        ; NEA track ID for "BONUS STAGE"
+                                        STA $4105       ; NEA: play BGM track 13 on current album
 C - - - - - 0x000A25 00:CA15: 20 41 C1  JSR sub_C141
 C - - - - - 0x000A28 00:CA18: 20 1C D7  JSR sub_D71C
 C - - - - - 0x000A2B 00:CA1B: C6 0F     DEC ram_000E_timer + $01
@@ -4174,10 +4210,10 @@ _off000_D658_00:
 _off000_D65D_02:
 ; con_D640_02
 ; bzk garbage
-- - - - - - 0x00166D 00:D65D: 74 20     .word $2074 ; ppu address
-- - - - - - 0x00166F 00:D65F: 71        .byte $71   ; 
-- - - - - - 0x001670 00:D660: 04        .byte $04   ; 
-- - - - - - 0x001671 00:D661: 06        .byte $06   ; 
+;NEA DELETED- - - - - - 0x00166D 00:D65D: 74 20     .word $2074 ; ppu address
+;NEA DELETED- - - - - - 0x00166F 00:D65F: 71        .byte $71   ; 
+;NEA DELETED- - - - - - 0x001670 00:D660: 04        .byte $04   ; 
+;NEA DELETED- - - - - - 0x001671 00:D661: 06        .byte $06   ; 
 
 
 
@@ -4472,7 +4508,7 @@ MenuA_CycleOption:          ;
     LDA $0079               ; current value (00–02)
     CLC
     ADC #$01                ; ++
-    CMP #$03                ; reached 3?
+    CMP #$04                ; reached 3?
     BCC MenuA_Store         ; if <3, keep value
     LDA #$00                ; else wrap back to 1
 MenuA_Store:
@@ -6491,10 +6527,10 @@ C - - - - - 0x00237E 00:E36E: C8        INY
 C - - - - - 0x00237F 00:E36F: 85 80     STA ram_p1_0080
 C - - - - - 0x002381 00:E371: A2 00     LDX #$00
 ; NEA BGM ( LEVEL START ) 
-                                        LDA $0079   ; 0–13 album
-                                        STA $4104            ; NEA album = stage BGM
-                                        LDA #$03
-                                        STA $4105            ; play track 1
+                                        LDA $0079   ; LOAD ALBUM # (A/B @ START)
+                                        STA $4104   ; NEA album
+                                        LDA #$03  ; SELECT TRACK #03 - BGM START
+                                        STA $4105            ; play track 3
                                         LDA #%00000000 ;(Silence)
                                         STA $4015
 bra_E373_loop:
@@ -9021,6 +9057,10 @@ off_F136_04_solid:
 
 
 sub_F13A:
+; nea bonus
+
+                                        LDA #11        ; NEA track ID for "BONUS STAGE"
+                                        STA $4105       ; NEA: play BGM track 11 on current album
 C - - - - - 0x00314A 00:F13A: A4 7C     LDY ram_p1_bonus_round
 C - - - - - 0x00314C 00:F13C: B9 7F F2  LDA tbl_F281_balloons_positions - $02,Y
 C - - - - - 0x00314F 00:F13F: 85 1C     STA ram_001C_temp
@@ -12216,15 +12256,12 @@ tbl_FFE1:
 ;-----------------------------------------
 nea_sfx_hook:
                     PHA             ; save A (safety)
-                                    ;    LDA #$FF
-                                    ;    STA $4103       ; album 1 = SFX
-                    LDA ram_demo_flag   ; $0042
-                    BEQ NEA_SFX_Skip   ; 0 = demo → skip NEA
                     LDA $0079
-                    STA $4104       ; album 255 = SFX
+                    STA $4104       ; album #
                     TYA             ; A = SFX ID
                     STA $4106       ; track = SFX ID
-                    NEA_SFX_Skip:
+                    LDA #%00000000 ;(Silence)
+                    STA $4015
                     PLA             ; restore A
                     RTS
 ;-----------------------------------------------------------------------------
