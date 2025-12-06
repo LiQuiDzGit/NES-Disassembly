@@ -29,7 +29,7 @@
 ; SFX 10 - MICROWAVE SFX
 
 
-
+; v 2025-12-06
 
 
 
@@ -173,6 +173,9 @@ C - - - - - 0x0000D7 00:C0C7: E6 21     INC ram_frm_cnt
 C - - - - - 0x0000D9 00:C0C9: A9 00     LDA #$00
 C D 2 - - - 0x0000DB 00:C0CB: 85 20     STA ram_nmi_trigger_flag
 C D 2 - - - 0x0000DD 00:C0CD: 4C 6D C0  JMP loc_C06D_main_game_script_loop
+
+
+
 sub_C0D0:
 C D 2 - - - 0x0000E0 00:C0D0: A2 00     LDX #$00
 C - - - - - 0x0000E2 00:C0D2: A5 23     LDA ram_0023_flag
@@ -226,6 +229,8 @@ C - - - - - 0x00012E 00:C11E: E8        INX
 C - - - - - 0x00012F 00:C11F: E8        INX
 C - - - - - 0x000130 00:C120: D0 F7     BNE bra_C119_hide_all_sprites_loop
 C - - - - - 0x000132 00:C122: 60        RTS
+
+
 
 tbl_C123_spr_T:
 - D 2 - - - 0x000133 00:C123: D0        .byte $D0   ; 00 
@@ -422,8 +427,8 @@ C - - - - - 0x000236 00:C226: D0 0B     BNE bra_C233_RTS
 C - - - - - 0x000238 00:C228: 45 23     EOR ram_0023_flag
 C - - - - - 0x00023A 00:C22A: 85 23     STA ram_0023_flag
 C - - - - - 0x00023C 00:C22C: F0 05     BEQ bra_C233_RTS
-C - - - - - 0x00023E 00:C22E: A9 01     LDA #$01
-C - - - - - 0x000240 00:C230: 8D 00 06  STA ram_sfx_0600
+;C - - - - - 0x00023E 00:C22E: A9 01     LDA #$01           ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x000240 00:C230: 8D 00 06  STA ram_sfx_0600   ; NEA DELETED TO FREE SPACE
 bra_C233_RTS:
 C - - - - - 0x000243 00:C233: 60        RTS
 bra_C234:
@@ -1036,7 +1041,6 @@ C - - - - - 0x0004D3 00:C4C3: 4C D1 C3  JMP loc_C3D1
 
 
 ofs_000_C4C6_08_sound_wave:
-
 C - - J - - 0x0004D6 00:C4C6: A5 21     LDA ram_frm_cnt
 C - - - - - 0x0004D8 00:C4C8: 4A        LSR
 C - - - - - 0x0004D9 00:C4C9: 29 03     AND #$03
@@ -1766,9 +1770,6 @@ C - - - - - 0x0008A3 00:C893: 20 3E CD  JSR sub_CD3E
 C - - - - - 0x0008A6 00:C896: EA        NOP
 C - - - - - 0x0008A7 00:C897: EA        NOP
 C - - - - - 0x0008A8 00:C898: EA        NOP
-
-
-
 C - - - - - 0x0008A9 00:C899: 20 3E D7  JSR sub_D73E
 C - - - - - 0x0008AC 00:C89C: A5 25     LDA ram_btn_Start
 C - - - - - 0x0008AE 00:C89E: 29 03     AND #$03
@@ -1783,7 +1784,7 @@ C - - - - - 0x0008B2 00:C8A2: F0 07     BEQ bra_C8AB_start_was_pressed
                                         JSR MenuA_CycleOption
                                         Title_NoA:
 ;;;; FREEZE DEMO SCREEN TIME
-;;;;C - - - - - 0x0008B4 00:C8A4: C6 0F    DEC ram_000E_timer + $01
+;;;;C - - - - - 0x0008B4 00:C8A4: C6 0F    DEC ram_000E_timer + $01   ; DEMO TIMER DISABLE
 C - - - - - 0x0008B6 00:C8A6: D0 E8     BNE bra_C890_loop
 C - - - - - 0x0008B8 00:C8A8: 4C 65 FF  JMP loc_FF65
 bra_C8AB_start_was_pressed:
@@ -1874,9 +1875,9 @@ C - - - - - 0x000963 00:C953: A5 61     LDA ram_0061
 C - - - - - 0x000965 00:C955: C9 3C     CMP #$3C
 C - - - - - 0x000967 00:C957: D0 08     BNE bra_C961
 bra_C959:
-C - - - - - 0x000969 00:C959: A9 01     LDA #$01
-C - - - - - 0x00096B 00:C95B: 8D 13 06  STA ram_sfx_0613
-C - - - - - 0x00096E 00:C95E: 8D 14 06  STA ram_sfx_0614
+;C - - - - - 0x000969 00:C959: A9 01     LDA #$01	    ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x00096B 00:C95B: 8D 13 06  STA ram_sfx_0613   ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x00096E 00:C95E: 8D 14 06  STA ram_sfx_0614   ; NEA DELETED TO FREE SPACE
 bra_C961:
 C - - - - - 0x000971 00:C961: 20 60 CB  JSR sub_CB60
 C - - - - - 0x000974 00:C964: 20 E6 F2  JSR sub_F2E6
@@ -1938,8 +1939,6 @@ C - - - - - 0x0009E2 00:C9D2: 20 3A F1  JSR sub_F13A
 C - - - - - 0x0009E5 00:C9D5: 20 39 C2  JSR sub_C239_enable_rendering
 C - - - - - 0x0009E8 00:C9D8: 20 0B D8  JSR sub_D80B_write_player_data___2
 C - - - - - 0x0009EB 00:C9DB: 20 C0 D8  JSR sub_D8C0
-
-
 C - - - - - 0x0009EE 00:C9DE: A9 00     LDA #$00
 C - - - - - 0x0009F0 00:C9E0: 85 4B     STA ram_004B_flag
 C - - - - - 0x0009F2 00:C9E2: 85 4F     STA ram_004F_flag
@@ -1947,9 +1946,7 @@ C - - - - - 0x0009F4 00:C9E4: A9 AC     LDA #< $08AC
 C - - - - - 0x0009F6 00:C9E6: 85 0F     STA ram_000E_timer + $01
 C - - - - - 0x0009F8 00:C9E8: A9 08     LDA #> $08AC
 C - - - - - 0x0009FA 00:C9EA: 85 0E     STA ram_000E_timer
-
 bra_C9EC_loop:
-
 C - - - - - 0x0009FC 00:C9EC: 20 41 C1  JSR sub_C141
 C - - - - - 0x0009FF 00:C9EF: 20 7B CB  JSR sub_CB7B
 C - - - - - 0x000A02 00:C9F2: A5 4B     LDA ram_004B_flag
@@ -1974,7 +1971,7 @@ C - - - - - 0x000A21 00:CA11: A9 1E     LDA #$1E
 C - - - - - 0x000A23 00:CA13: 85 0F     STA ram_000E_timer + $01
 bra_CA15_loop:
 ; NEA BONUS RESULT
-                                        LDA #13         ; NEA track ID for "BONUS STAGE"
+                                        LDA #13         ; NEA track ID for "BONUS RESULT"
                                         STA $4105       ; NEA: play BGM track 13 on current album
 C - - - - - 0x000A25 00:CA15: 20 41 C1  JSR sub_C141
 C - - - - - 0x000A28 00:CA18: 20 1C D7  JSR sub_D71C
@@ -2069,6 +2066,21 @@ C - - - - - 0x000ABF 00:CAAF: E0 C0     CPX #$C0
 C - - - - - 0x000AC1 00:CAB1: D0 F8     BNE bra_CAAB_loop
 C - - - - - 0x000AC3 00:CAB3: 60        RTS
 
+;-----------------------------------------
+; nea_sfx_hook
+; in:  Y = SFX ID
+;-----------------------------------------
+nea_sfx_hook:
+                    PHA             ; save A
+                    LDA $0079       ; NEA ALBUM #
+                    STA $4104       ; NEA ALBUM #
+                    TYA             ; MOVE Y -> A = SFX ID
+                    STA $4106       ; track = SFX ID
+                    LDA #%00000000  ; MUTE NES ORIGINAL AUDIO
+                    STA $4015
+                    PLA             ; restore A
+                    RTS
+;-----------------------------------------------------------------------------
 
 
 sub_CAB4:
@@ -2081,10 +2093,10 @@ C - - - - - 0x000ACE 00:CABE: 85 0E     STA ram_000E_timer
 C - - - - - 0x000AD0 00:CAC0: 4C DA CA  JMP loc_CADA
 bra_CAC3:
 sub_CAC3:
-C - - - - - 0x000AD3 00:CAC3: A9 01     LDA #$01
-C - - - - - 0x000AD5 00:CAC5: 8D 15 06  STA ram_sfx_0615
-C - - - - - 0x000AD8 00:CAC8: 8D 16 06  STA ram_sfx_0616
-C - - - - - 0x000ADB 00:CACB: 8D 17 06  STA ram_sfx_0617
+;C - - - - - 0x000AD3 00:CAC3: A9 01     LDA #$01           ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x000AD5 00:CAC5: 8D 15 06  STA ram_sfx_0615   ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x000AD8 00:CAC8: 8D 16 06  STA ram_sfx_0616   ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x000ADB 00:CACB: 8D 17 06  STA ram_sfx_0617   ; NEA DELETED TO FREE SPACE
 C - - - - - 0x000ADE 00:CACE: A9 00     LDA #$00    ; set demo mode
 C - - - - - 0x000AE0 00:CAD0: 85 42     STA ram_demo_flag
 C - - - - - 0x000AE2 00:CAD2: A9 A4     LDA #< $01A4
@@ -2496,10 +2508,10 @@ C - - - - - 0x000D71 00:CD61: 85 29     STA ram_cam_pos_X_hi
 C - - - - - 0x000D73 00:CD63: A0 0C     LDY #$0C
 C - - - - - 0x000D75 00:CD65: 20 26 D1  JSR sub_D126
 C - - - - - 0x000D78 00:CD68: 20 39 C2  JSR sub_C239_enable_rendering
-C - - - - - 0x000D7B 00:CD6B: A9 01     LDA #$01
-C - - - - - 0x000D7D 00:CD6D: 8D 0E 06  STA ram_sfx_060E
-C - - - - - 0x000D80 00:CD70: 8D 0F 06  STA ram_sfx_060F
-C - - - - - 0x000D83 00:CD73: 8D 10 06  STA ram_sfx_0610
+;C - - - - - 0x000D7B 00:CD6B: A9 01     LDA #$01	    ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x000D7D 00:CD6D: 8D 0E 06  STA ram_sfx_060E   ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x000D80 00:CD70: 8D 0F 06  STA ram_sfx_060F   ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x000D83 00:CD73: 8D 10 06  STA ram_sfx_0610   ; NEA DELETED TO FREE SPACE
 C - - - - - 0x000D86 00:CD76: A9 D2     LDA #$D2
 C - - - - - 0x000D88 00:CD78: 85 0F     STA ram_000E_timer + $01
 bra_CD7A_loop:
@@ -2593,9 +2605,9 @@ C - - - - - 0x000E36 00:CE26: 20 03 D7  JSR sub_D703
 C - - - - - 0x000E39 00:CE29: 20 39 C2  JSR sub_C239_enable_rendering
 C - - - - - 0x000E3C 00:CE2C: A0 00     LDY #$00
 C - - - - - 0x000E3E 00:CE2E: 20 CD CE  JSR sub_CECD
-C - - - - - 0x000E41 00:CE31: A9 01     LDA #$01
-C - - - - - 0x000E43 00:CE33: 8D 01 06  STA ram_sfx_0601
-C - - - - - 0x000E46 00:CE36: 8D 18 06  STA ram_sfx_0618
+;C - - - - - 0x000E41 00:CE31: A9 01     LDA #$01	    ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x000E43 00:CE33: 8D 01 06  STA ram_sfx_0601   ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x000E46 00:CE36: 8D 18 06  STA ram_sfx_0618   ; NEA DELETED TO FREE SPACE
 C - - - - - 0x000E49 00:CE39: 20 BB CE  JSR sub_CEBB
 C - - - - - 0x000E4C 00:CE3C: A0 04     LDY #$04
 C - - - - - 0x000E4E 00:CE3E: 20 CD CE  JSR sub_CECD
@@ -3444,7 +3456,7 @@ _off007_D2D9_06:
 - D 2 - I - 0x00135C 00:D34C: 16 27     .word $2716 ; 
 - D 2 - I - 0x00135E 00:D34E: B6 27     .word $27B6 ; 
 _off007_D350_08:
-;- D 2 - I - 0x001360 00:D350: 00        .byte $00   ; end token
+- D 2 - I - 0x001360 00:D350: 00        .byte $00   ; end token
 
 
 
@@ -3829,7 +3841,7 @@ C D 2 - - - 0x0014CE 00:D4BE: 85 19     STA ram_0019_t01
 bra_D4C0_loop:
 C - - - - - 0x0014D0 00:D4C0: A4 19     LDY ram_0019_t01
 ; NEA SFX (GET)
-                                       JSR nea_sfx_hook 
+					JSR nea_sfx_hook ; NEA SFX
 C - - - - - 0x0014D2 00:D4C2: 20 CA D4  JSR sub_D4CA
 C - - - - - 0x0014D5 00:D4C5: C6 18     DEC ram_0018_t03_loop_counter
 C - - - - - 0x0014D7 00:D4C7: D0 F7     BNE bra_D4C0_loop
@@ -3854,6 +3866,8 @@ C - - - - - 0x0014EC 00:D4DC: 85 13     STA ram_0012_t03_data + $01
 C - - - - - 0x0014EE 00:D4DE: A2 74     LDX #< ram_p1_score_000000xx
 C - - - - - 0x0014F0 00:D4E0: A0 03     LDY #$03
 C - - - - - 0x0014F2 00:D4E2: 4C 02 D5  JMP loc_D502
+
+
 
 sub_D4E5_increase_counter:
 loc_D4E5_increase_counter:
@@ -4201,10 +4215,10 @@ _off000_D658_00:
 _off000_D65D_02:
 ; con_D640_02
 ; bzk garbage
-;NEA DELETED- - - - - - 0x00166D 00:D65D: 74 20     .word $2074 ; ppu address      ; REMOVED TO FREE SPACE
-;NEA DELETED- - - - - - 0x00166F 00:D65F: 71        .byte $71   ;      ; REMOVED TO FREE SPACE
-;NEA DELETED- - - - - - 0x001670 00:D660: 04        .byte $04   ;      ; REMOVED TO FREE SPACE
-;NEA DELETED- - - - - - 0x001671 00:D661: 06        .byte $06   ;      ; REMOVED TO FREE SPACE
+- - - - - - 0x00166D 00:D65D: 74 20     .word $2074 ; ppu address
+- - - - - - 0x00166F 00:D65F: 71        .byte $71   ; 
+- - - - - - 0x001670 00:D660: 04        .byte $04   ; 
+- - - - - - 0x001671 00:D661: 06        .byte $06   ; 
 
 
 
@@ -4340,10 +4354,10 @@ C - - - - - 0x0016D7 00:D6C7: 90 04     BCC bra_D6CD
 - - - - - - 0x0016D9 00:D6C9: A5 48     LDA ram_0048
 - - - - - - 0x0016DB 00:D6CB: 85 75     STA ram_p1_0075
 bra_D6CD:
-C - - - - - 0x0016DD 00:D6CD: A9 01     LDA #$01
-C - - - - - 0x0016DF 00:D6CF: 8D 02 06  STA ram_sfx_0602
-C - - - - - 0x0016E2 00:D6D2: 8D 03 06  STA ram_sfx_0603
-C - - - - - 0x0016E5 00:D6D5: 8D 04 06  STA ram_sfx_0604
+;C - - - - - 0x0016DD 00:D6CD: A9 01     LDA #$01	    ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x0016DF 00:D6CF: 8D 02 06  STA ram_sfx_0602   ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x0016E2 00:D6D2: 8D 03 06  STA ram_sfx_0603   ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x0016E5 00:D6D5: 8D 04 06  STA ram_sfx_0604   ; NEA DELETED TO FREE SPACE
 C - - - - - 0x0016E8 00:D6D8: A0 02     LDY #con_D536_02
 C - - - - - 0x0016EA 00:D6DA: 20 E5 D4  JSR sub_D4E5_increase_counter
 C - - - - - 0x0016ED 00:D6DD: 90 04     BCC bra_D6E3_not_overflow
@@ -4423,8 +4437,6 @@ C - - - - - 0x00174E 00:D73E: A5 24     LDA ram_btn_Select
 C - - - - - 0x001750 00:D740: 29 03     AND #$03
 C - - - - - 0x001752 00:D742: C9 01     CMP #$01
 C - - - - - 0x001754 00:D744: D0 0A     BNE bra_D750
-
-
 C - - - - - 0x001756 00:D746: A9 F0     LDA #$F0
 C - - - - - 0x001758 00:D748: 85 0F     STA ram_000E_timer + $01
 C - - - - - 0x00175A 00:D74A: A5 4A     LDA ram_004A
@@ -4444,16 +4456,16 @@ C - - - - - 0x00176E 00:D75E: A8        TAY
 C - - - - - 0x00176F 00:D75F: 4C 7A D7  JMP loc_D77A
 
 
-; bzk garbage                                     ; REMOVED TO FREE SPACE
-;NEA DELETED- - - - - - 0x001772 00:D762: A5 22     LDA ram_btn_AB
-;NEA DELETED- - - - - - 0x001774 00:D764: 29 03     AND #$03
-;NEA DELETED- - - - - - 0x001776 00:D766: C9 01     CMP #$01
-;NEA DELETED- - - - - - 0x001778 00:D768: D0 0A     BNE bra_D774
-;NEA DELETED- - - - - - 0x00177A 00:D76A: A9 F0     LDA #$F0
-;NEA DELETED- - - - - - 0x00177C 00:D76C: 85 0F     STA ram_000E_timer + $01
-;NEA DELETED- - - - - - 0x00177E 00:D76E: A5 2E     LDA ram_002E_useless_00
-;NEA DELETED- - - - - - 0x001780 00:D770: 49 01     EOR #$01
-;NEA DELETED- - - - - - 0x001782 00:D772: 85 2E     STA ram_002E_useless_00
+; bzk garbage
+- - - - - - 0x001772 00:D762: A5 22     LDA ram_btn_AB
+- - - - - - 0x001774 00:D764: 29 03     AND #$03
+- - - - - - 0x001776 00:D766: C9 01     CMP #$01
+- - - - - - 0x001778 00:D768: D0 0A     BNE bra_D774
+- - - - - - 0x00177A 00:D76A: A9 F0     LDA #$F0
+- - - - - - 0x00177C 00:D76C: 85 0F     STA ram_000E_timer + $01
+- - - - - - 0x00177E 00:D76E: A5 2E     LDA ram_002E_useless_00
+- - - - - - 0x001780 00:D770: 49 01     EOR #$01
+- - - - - - 0x001782 00:D772: 85 2E     STA ram_002E_useless_00
 bra_D774:
 - - - - - - 0x001784 00:D774: A5 2E     LDA ram_002E_useless_00
 - - - - - - 0x001786 00:D776: 0A        ASL
@@ -4494,6 +4506,7 @@ C - - - - - 0x0017B6 00:D7A6: C6 12     DEC ram_0012_t09_tiles_counter
 C - - - - - 0x0017B8 00:D7A8: D0 F5     BNE bra_D79F_loop
 C - - - - - 0x0017BA 00:D7AA: 86 2A     STX ram_buffer_index_1
 C - - - - - 0x0017BC 00:D7AC: 60        RTS
+
 ; NEA ALBUM SELECT                                              ; NEA AUDIO ALBUM SELECT
 MenuA_CycleOption:          ; 
                                         LDA $0079               ; current value (00–03)
@@ -4506,6 +4519,7 @@ MenuA_Store:
                                         STA $0079               ; save new value
                                         LDA #$01                ; RESTORE "A" VALUE (so demo not start)
                                         RTS
+
 tbl_D7AD:
 - D 2 - - - 0x0017BD 00:D7AD: C1 D7     .word _off001_D7C1_00
 - D 2 - - - 0x0017BF 00:D7AF: C7 D7     .word _off001_D7C7_02
@@ -5166,22 +5180,20 @@ bra_DB54_RTS:
 C - - - - - 0x001B64 00:DB54: 60        RTS
 
 
+
 ofs_001_DB55_2A:
 ; NEA BGM ( DEAD ) 
-
                                         LDA #05              ; NEA AUDIO BGM
                                         STA $4105            ; play track 5
 C - - J - - 0x001B65 00:DB55: AD A5 04  LDA ram_obj_2_type
 C - - - - - 0x001B68 00:DB58: 0D AD 04  ORA ram_obj_2_type + $08
 C - - - - - 0x001B6B 00:DB5B: D0 1D     BNE bra_DB7A_RTS    ; if something
 ; if both nothing
-
-
 C - - - - - 0x001B6D 00:DB5D: 20 BF F4  JSR sub_F4BF
-C - - - - - 0x001B70 00:DB60: A9 01     LDA #$01
-C - - - - - 0x001B72 00:DB62: 8D 0B 06  STA ram_sfx_060B
-C - - - - - 0x001B75 00:DB65: 8D 0C 06  STA ram_sfx_060C
-C - - - - - 0x001B78 00:DB68: 8D 0D 06  STA ram_sfx_060D
+;C - - - - - 0x001B70 00:DB60: A9 01     LDA #$01	    ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x001B72 00:DB62: 8D 0B 06  STA ram_sfx_060B   ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x001B75 00:DB65: 8D 0C 06  STA ram_sfx_060C   ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x001B78 00:DB68: 8D 0D 06  STA ram_sfx_060D   ; NEA DELETED TO FREE SPACE
 C - - - - - 0x001B7B 00:DB6B: A9 16     LDA #con_anim_id_16
 C - - - - - 0x001B7D 00:DB6D: 8D 04 04  STA ram_obj_1_animation
 C - - - - - 0x001B80 00:DB70: A9 00     LDA #$00
@@ -5243,8 +5255,8 @@ C - - - - - 0x001BCC 00:DBBC: B1 1E     LDA (ram_001E_t04_object_data),Y
 C - - - - - 0x001BCE 00:DBBE: D0 23     BNE bra_DBE3    ; if not player
 ; if player
 C - - - - - 0x001BD0 00:DBC0: 86 18     STX ram_0018_t05_save_X
-C - - - - - 0x001BD2 00:DBC2: A5 42     LDA ram_demo_flag
-C - - - - - 0x001BD4 00:DBC4: 8D 0A 06  STA ram_sfx_060A
+;C - - - - - 0x001BD2 00:DBC2: A5 42     LDA ram_demo_flag   ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x001BD4 00:DBC4: 8D 0A 06  STA ram_sfx_060A    ; NEA DELETED TO FREE SPACE
 C - - - - - 0x001BD7 00:DBC7: A0 3C     LDY #$3C
 ; NEA SFX (JUMP)
                                         JSR nea_sfx_hook  ; PLAY NEA SFX JUMP (ID 60)
@@ -5611,6 +5623,8 @@ C - - J - - 0x001E35 00:DE25: CE 27 04  DEC ram_obj_1_timer + con_ofs_obj + $20
 C - - - - - 0x001E38 00:DE28: D0 FA     BNE bra_DE24_RTS
 bra_DE2A:
 C - - - - - 0x001E3A 00:DE2A: 4C 17 DD  JMP loc_DD17
+
+
 
 ofs_001_DE2D_1E:
 C - - J - - 0x001E3D 00:DE2D: CE 27 04  DEC ram_obj_1_timer + con_ofs_obj + $20
@@ -6247,10 +6261,9 @@ C - - - - - 0x0021CA 00:E1BA: B1 1E     LDA (ram_001E_t04_object_data),Y
 C - - - - - 0x0021CC 00:E1BC: D0 23     BNE bra_E1E1    ; if not player
 ; if player
 C - - - - - 0x0021CE 00:E1BE: 86 18     STX ram_0018_t06_save_X
-
-C - - - - - 0x0021D0 00:E1C0: A9 01     LDA #$01
-C - - - - - 0x0021D2 00:E1C2: 8D 0A 06  STA ram_sfx_060A
-
+;C - - - - - 0x0021D0 00:E1C0: A9 01     LDA #$01           ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x0021D2 00:E1C2: 8D 0A 06  STA ram_sfx_060A   ; NEA DELETED TO FREE SPACE
+                                        JSR nea_sfx_hook ; NEA SFX ID 5 (JUMP)
 C - - - - - 0x0021D5 00:E1C5: A0 3C     LDY #$3C
 C - - - - - 0x0021D7 00:E1C7: 20 CA D4  JSR sub_D4CA
 C - - - - - 0x0021DA 00:E1CA: A6 18     LDX ram_0018_t06_save_X
@@ -6446,8 +6459,10 @@ C - - - - - 0x002311 00:E301: E6 51     INC ram_0051    ; 00 -> 01
 C - - - - - 0x002313 00:E303: A9 20     LDA #$20
 C - - - - - 0x002315 00:E305: 85 5A     STA ram_005A
 C - - - - - 0x002317 00:E307: 20 BF F4  JSR sub_F4BF
-C - - - - - 0x00231A 00:E30A: A9 01     LDA #$01
-C - - - - - 0x00231C 00:E30C: 8D 06 06  STA ram_sfx_0606
+;C - - - - - 0x00231A 00:E30A: A9 01     LDA #$01	    ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x00231C 00:E30C: 8D 06 06  STA ram_sfx_0606   ; NEA DELETED TO FREE SPACE
+; NEA SFX ID 25 (BLUE BALLON BUST)
+                                        JSR nea_sfx_hook    ; NEA SFX ID 25
 ; disable balloon object
 C - - - - - 0x00231F 00:E30F: A9 00     LDA #$00
 C - - - - - 0x002321 00:E311: 8D 14 04  STA ram_obj_1_animation + con_ofs_obj + $10  ; con_anim_id_00
@@ -6549,8 +6564,6 @@ C - - - - - 0x0023B6 00:E3A6: AA        TAX
 C - - - - - 0x0023B7 00:E3A7: E4 80     CPX ram_p1_0080
 C - - - - - 0x0023B9 00:E3A9: D0 C8     BNE bra_E373_loop
 C - - - - - 0x0023BB 00:E3AB: A2 00     LDX #$00
-
-
 bra_E3AD_loop:
 C - - - - - 0x0023BD 00:E3AD: 86 1B     STX ram_001B_temp
 C - - - - - 0x0023BF 00:E3AF: 20 27 E4  JSR sub_E427
@@ -7141,8 +7154,8 @@ C - - - - - 0x0026A2 00:E692: 20 EF DA  JSR sub_DAEF
 C - - - - - 0x0026A5 00:E695: 68        PLA
 C - - - - - 0x0026A6 00:E696: AA        TAX
 bra_E697:
-C - - - - - 0x0026A7 00:E697: A5 42     LDA ram_demo_flag
-C - - - - - 0x0026A9 00:E699: 8D 08 06  STA ram_sfx_0608
+;C - - - - - 0x0026A7 00:E697: A5 42     LDA ram_demo_flag   ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x0026A9 00:E699: 8D 08 06  STA ram_sfx_0608    ; NEA DELETED TO FREE SPACE
 ; player picked up item
 C - - - - - 0x0026AC 00:E69C: A9 04     LDA #$04
 C - - - - - 0x0026AE 00:E69E: 9D 60 02  STA ram_obj_6_state,X
@@ -7280,10 +7293,11 @@ C - - - - - 0x002792 00:E782: A9 78     LDA #$78
 C - - - - - 0x002794 00:E784: 8D 27 04  STA ram_obj_1_timer + con_ofs_obj + $20
 bra_E787_RTS:
 C - - - - - 0x002797 00:E787: 60        RTS
+
+
 ; bzk garbage
-; NEA DELETED SPACE
-;- - - - - - 0x002798 00:E788: 02        .byte $02, $02, $00, $02, $02, $02, $00, $02   ;  DELETED TO FREE SPACE
-;- - - - - - 0x0027A0 00:E790: 02        .byte $02, $02, $00, $02, $02, $02, $00, $02   ;  DELETED TO FREE SPACE
+- - - - - - 0x002798 00:E788: 02        .byte $02, $02, $00, $02, $02, $02, $00, $02   ; 
+- - - - - - 0x0027A0 00:E790: 02        .byte $02, $02, $00, $02, $02, $02, $00, $02   ; 
 
 
 
@@ -8391,12 +8405,10 @@ C - - - - - 0x002D79 00:ED69: F0 E2     BEQ bra_ED4D_RTS    ; if nothing
 C - - - - - 0x002D7B 00:ED6B: C9 02     CMP #$02
 C - - - - - 0x002D7D 00:ED6D: B0 A3     BCS bra_ED12_score_points
 ; if sound wave
-C - - - - - 0x002D7F 00:ED6F: A5 42     LDA ram_demo_flag
-C - - - - - 0x002D81 00:ED71: 8D 09 06  STA ram_sfx_0609
-
+;C - - - - - 0x002D7F 00:ED6F: A5 42     LDA ram_demo_flag   ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x002D81 00:ED71: 8D 09 06  STA ram_sfx_0609   ; NEA DELETED TO FREE SPACE
 C - - - - - 0x002D84 00:ED74: 20 77 EE  JSR sub_EE77
 C - - - - - 0x002D87 00:ED77: 20 C9 EE  JSR sub_EEC9
-
 C - - - - - 0x002D8A 00:ED7A: A9 08     LDA #con_anim_id_sound_wave
 C - - - - - 0x002D8C 00:ED7C: A0 04     LDY #con_obj_animation
 C - - - - - 0x002D8E 00:ED7E: 91 1E     STA (ram_001E_t04_object_data),Y
@@ -8755,8 +8767,9 @@ C - - - - - 0x002F95 00:EF85: 38        SEC
 C - - - - - 0x002F96 00:EF86: ED 01 04  SBC ram_obj_1_pos_X_lo
 C - - - - - 0x002F99 00:EF89: C9 02     CMP #$02
 C - - - - - 0x002F9B 00:EF8B: B0 0B     BCS bra_EF98_no_collision
-C - - - - - 0x002F9D 00:EF8D: A5 42     LDA ram_demo_flag
-C - - - - - 0x002F9F 00:EF8F: 8D 07 06  STA ram_sfx_0607
+;C - - - - - 0x002F9D 00:EF8D: A5 42     LDA ram_demo_flag  ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x002F9F 00:EF8F: 8D 07 06  STA ram_sfx_0607   ; NEA DELETED TO FREE SPACE
+                                        JSR nea_sfx_hook   ; (BELL FALL ID 01)
 ; if player touches bell, make it fall
 C - - - - - 0x002FA2 00:EF92: A9 02     LDA #$02
 ; bzk optimize, INY
@@ -9158,8 +9171,9 @@ C - - - - - 0x0031FC 00:F1EC: A9 06     LDA #con_anim_id_fall
 C - - - - - 0x0031FE 00:F1EE: 8D 04 04  STA ram_obj_1_animation
 bra_F1F1:
 loc_F1F1:
-C D 3 - - - 0x003201 00:F1F1: A9 01     LDA #$01
-C - - - - - 0x003203 00:F1F3: 8D 08 06  STA ram_sfx_0608
+;C D 3 - - - 0x003201 00:F1F1: A9 01     LDA #$01	    ; NEA DELETED TO FREE SPACE
+;C - - - - - 0x003203 00:F1F3: 8D 08 06  STA ram_sfx_0608   ; NEA DELETED TO FREE SPACE
+                                        JSR nea_sfx_hook ; NEA SFX (ID 2 (BALLOON POP)
 C - - - - - 0x003206 00:F1F6: A9 00     LDA #$00
 C - - - - - 0x003208 00:F1F8: 9D 60 02  STA ram_obj_6_state,X
 C - - - - - 0x00320B 00:F1FB: C6 52     DEC ram_0052
@@ -9919,7 +9933,7 @@ C - - - - - 0x0036B9 00:F6A9: 20 9F F4  JSR sub_F49F_jump_to_pointers_after_jsr
 - D 3 - I - 0x0036BC 00:F6AC: D0 F6     .word ofs_005_F6D0_E8
 - D 3 - I - 0x0036BE 00:F6AE: DE F6     .word ofs_005_F6DE_E9
 - D 3 - I - 0x0036C0 00:F6B0: F0 F6     .word ofs_005_F6F0_EA
-- - - - - - 0x0036C2 00:F6B2: 02 F7     .word ofs_005_F702_EB   ; unused, index doesn't exist ; nea possible free space
+- - - - - - 0x0036C2 00:F6B2: 02 F7     .word ofs_005_F702_EB   ; unused, index doesn't exist
 - - - - - - 0x0036C4 00:F6B4: 14 F7     .word ofs_005_F714_EC   ; unused, index doesn't exist
 - - - - - - 0x0036C6 00:F6B6: 1E F7     .word ofs_005_F71E_ED   ; unused, index doesn't exist
 - D 3 - I - 0x0036C8 00:F6B8: 28 F7     .word ofs_005_F728_EE
@@ -9974,38 +9988,37 @@ C - - - - - 0x00370F 00:F6FF: 4C 36 F6  JMP loc_F636_next_byte
 
 
 
-;disable for NEA
 ofs_005_F702_EB:
 ; con_se_cb_EB
 ; bzk garbage
-;- - - - - - 0x003712 00:F702: 20 0B F8  JSR sub_F80B_read_sound_data    ; NEA DISABLE TO FREE SPACE
-;- - - - - - 0x003715 00:F705: 85 F6     STA $F6 ; ram_00F6_se_temp      ; NEA DISABLE TO FREE SPACE
-;- - - - - - 0x003717 00:F707: A0 01     LDY #$01                        ; NEA DISABLE TO FREE SPACE
-;- - - - - - 0x003719 00:F709: B1 F0     LDA (ram_00F0_se_t03_data),Y    ; NEA DISABLE TO FREE SPACE
-;- - - - - - 0x00371B 00:F70B: 29 F0     AND #$F0                        ; NEA DISABLE TO FREE SPACE
-;- - - - - - 0x00371D 00:F70D: 05 F6     ORA $F6 ; ram_00F6_se_temp      ; NEA DISABLE TO FREE SPACE
-;- - - - - - 0x00371F 00:F70F: 91 F0     STA (ram_00F0_se_t03_data),Y    ; NEA DISABLE TO FREE SPACE
-;- - - - - - 0x003721 00:F711: 4C 36 F6  JMP loc_F636_next_byte          ; NEA DISABLE TO FREE SPACE
+- - - - - - 0x003712 00:F702: 20 0B F8  JSR sub_F80B_read_sound_data
+- - - - - - 0x003715 00:F705: 85 F6     STA $F6 ; ram_00F6_se_temp
+- - - - - - 0x003717 00:F707: A0 01     LDY #$01
+- - - - - - 0x003719 00:F709: B1 F0     LDA (ram_00F0_se_t03_data),Y
+- - - - - - 0x00371B 00:F70B: 29 F0     AND #$F0
+- - - - - - 0x00371D 00:F70D: 05 F6     ORA $F6 ; ram_00F6_se_temp
+- - - - - - 0x00371F 00:F70F: 91 F0     STA (ram_00F0_se_t03_data),Y
+- - - - - - 0x003721 00:F711: 4C 36 F6  JMP loc_F636_next_byte
 
 
-; disable for NEA
+
 ofs_005_F714_EC:
 ; con_se_cb_EC
 ; bzk garbage
-;- - - - - - 0x003724 00:F714: 20 0B F8  JSR sub_F80B_read_sound_data    ; NEA DISABLE TO FREE SPACE
-;- - - - - - 0x003727 00:F717: A0 02     LDY #$02
-;- - - - - - 0x003729 00:F719: 91 F0     STA (ram_00F0_se_t03_data),Y
-;- - - - - - 0x00372B 00:F71B: 4C 36 F6  JMP loc_F636_next_byte
+- - - - - - 0x003724 00:F714: 20 0B F8  JSR sub_F80B_read_sound_data
+- - - - - - 0x003727 00:F717: A0 02     LDY #$02
+- - - - - - 0x003729 00:F719: 91 F0     STA (ram_00F0_se_t03_data),Y
+- - - - - - 0x00372B 00:F71B: 4C 36 F6  JMP loc_F636_next_byte
 
 
-;disable for NEA
+
 ofs_005_F71E_ED:
 ; con_se_cb_ED
 ; bzk garbage
-;- - - - - - 0x00372E 00:F71E: 20 0B F8  JSR sub_F80B_read_sound_data    ; NEA DISABLE TO FREE SPACE
-;- - - - - - 0x003731 00:F721: A0 04     LDY #$04
-;- - - - - - 0x003733 00:F723: 91 F0     STA (ram_00F0_se_t03_data),Y
-;- - - - - - 0x003735 00:F725: 4C 36 F6  JMP loc_F636_next_byte
+- - - - - - 0x00372E 00:F71E: 20 0B F8  JSR sub_F80B_read_sound_data
+- - - - - - 0x003731 00:F721: A0 04     LDY #$04
+- - - - - - 0x003733 00:F723: 91 F0     STA (ram_00F0_se_t03_data),Y
+- - - - - - 0x003735 00:F725: 4C 36 F6  JMP loc_F636_next_byte
 
 
 
@@ -12190,7 +12203,6 @@ bra_FFBC_loop:
 C - - - - - 0x003FCC 00:FFBC: 20 41 C1  JSR sub_C141
 C - - - - - 0x003FCF 00:FFBF: 20 60 CB  JSR sub_CB60
 C - - - - - 0x003FD2 00:FFC2: 20 E6 F2  JSR sub_F2E6
-
 C - - - - - 0x003FD5 00:FFC5: A5 4F     LDA ram_004F_flag
 C - - - - - 0x003FD7 00:FFC7: 05 4B     ORA ram_004B_flag
 C - - - - - 0x003FD9 00:FFC9: D0 10     BNE bra_FFDB
@@ -12234,23 +12246,9 @@ tbl_FFE1:
 - D 3 - - - 0x004007 00:FFF7: 99        .byte $99   ; 16 
 - D 3 - - - 0x004008 00:FFF8: FF        .byte $FF   ; 17 
 - - - - - - 0x004009 00:FFF9: FF        .byte $FF   ; 18 
-;-----------------------------------------
-; nea_sfx_hook
-; in:  Y = SFX ID
-;-----------------------------------------
-nea_sfx_hook:
-                    PHA             ; save A
-                    LDA $0079       ; NEA ALBUM #
-                    STA $4104       ; NEA ALBUM #
-                    TYA             ; MOVE Y -> A = SFX ID
-                    STA $4106       ; track = SFX ID
-                    LDA #%00000000  ; MUTE NES ORIGINAL AUDIO
-                    STA $4015
-                    PLA             ; restore A
-                    RTS
-;-----------------------------------------------------------------------------
 
-;---------------------------------------------------------------------------------
+
+
 .out .sprintf("Free bytes in bank FF: 0x%04X [%d]", ($FFFA - *), ($FFFA - *))
 
 
