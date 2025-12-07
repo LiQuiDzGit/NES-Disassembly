@@ -426,11 +426,21 @@ C - - - - - 0x000234 00:C224: C9 01     CMP #$01
 C - - - - - 0x000236 00:C226: D0 0B     BNE bra_C233_RTS
 C - - - - - 0x000238 00:C228: 45 23     EOR ram_0023_flag
 C - - - - - 0x00023A 00:C22A: 85 23     STA ram_0023_flag
-C - - - - - 0x00023C 00:C22C: F0 05     BEQ bra_C233_RTS
+C - - - - - 0x00023C 00:C22C: F0 05     BEQ bra_C233_resume
+; NEA PAUSE
+                                         LDA #%0000001 ; PAUSE - STOP BGM
+                                         STA $4101
+                                         LDA #06       ; NEA SFX PAUSE ID 06
+                                         STA $4106
 ;C - - - - - 0x00023E 00:C22E: A9 01     LDA #$01           ; NEA DELETED TO FREE SPACE
 ;C - - - - - 0x000240 00:C230: 8D 00 06  STA ram_sfx_0600   ; NEA DELETED TO FREE SPACE
 bra_C233_RTS:
 C - - - - - 0x000243 00:C233: 60        RTS
+bra_C233_resume:
+; NEA RESUME
+                                         LDA #%0000000 ; PAUSE - RESUME NEA BGM
+                                         STA $4101
+                                         RTS
 bra_C234:
 C - - - - - 0x000244 00:C234: A9 00     LDA #$00
 C - - - - - 0x000246 00:C236: 85 23     STA ram_0023_flag
@@ -2072,6 +2082,8 @@ C - - - - - 0x000AC3 00:CAB3: 60        RTS
 ;-----------------------------------------
 nea_sfx_hook:
                     PHA             ; save A
+                    LDA #180        ; NEA SFX VOL
+                    STA $4103       ; NEA SFX VOL
                     LDA $0079       ; NEA ALBUM #
                     STA $4104       ; NEA ALBUM #
                     TYA             ; MOVE Y -> A = SFX ID
@@ -6530,6 +6542,8 @@ C - - - - - 0x00237E 00:E36E: C8        INY
 C - - - - - 0x00237F 00:E36F: 85 80     STA ram_p1_0080
 C - - - - - 0x002381 00:E371: A2 00     LDX #$00
 ; NEA BGM ( LEVEL START ) 
+                                        LDA #220        ; NEA BGM VOL
+                                        STA $4102       ; NEA BGM VOL
                                         LDA $0079   ; LOAD ALBUM # (A/B @ START)
                                         STA $4104   ; NEA album
                                         LDA #$03    ; SELECT TRACK #03 - BGM START
@@ -9019,8 +9033,8 @@ C - - - - - 0x00312A 00:F11A: B1 1E     LDA (ram_001E_t04_object_data),Y
 C - - - - - 0x00312C 00:F11C: C9 40     CMP #$40
 C - - - - - 0x00312E 00:F11E: B0 C4     BCS bra_F0E4
 bra_F120:
-C - - - - - 0x003130 00:F120: A9 01     LDA #$01
-C - - - - - 0x003132 00:F122: 8D 07 06  STA ram_sfx_0607
+;C - - - - - 0x003130 00:F120: A9 01     LDA #$01         ; NEA DELETED
+;C - - - - - 0x003132 00:F122: 8D 07 06  STA ram_sfx_0607 ; NEA DELETED
 C - - - - - 0x003135 00:F125: A9 00     LDA #$00
 bra_F127_RTS:
 C - - - - - 0x003137 00:F127: 60        RTS
@@ -9408,8 +9422,8 @@ C - - - - - 0x003300 00:F2F0: A5 61     LDA ram_0061
 C - - - - - 0x003302 00:F2F2: C9 3C     CMP #$3C
 C - - - - - 0x003304 00:F2F4: F0 07     BEQ bra_F2FD_RTS
 C - - - - - 0x003306 00:F2F6: E6 61     INC ram_0061
-C - - - - - 0x003308 00:F2F8: A5 42     LDA ram_demo_flag
-C - - - - - 0x00330A 00:F2FA: 8D 05 06  STA ram_sfx_0605
+;C - - - - - 0x003308 00:F2F8: A5 42     LDA ram_demo_flag
+;C - - - - - 0x00330A 00:F2FA: 8D 05 06  STA ram_sfx_0605
 bra_F2FD_RTS:
 C - - - - - 0x00330D 00:F2FD: 60        RTS
 bra_F2FE:
@@ -9441,8 +9455,8 @@ C - - - - - 0x00333E 00:F32E: 60        RTS
 bra_F32F:
 C - - - - - 0x00333F 00:F32F: 20 83 F3  JSR sub_F383
 C - - - - - 0x003342 00:F332: 20 B2 F3  JSR sub_F3B2
-C - - - - - 0x003345 00:F335: A5 42     LDA ram_demo_flag
-C - - - - - 0x003347 00:F337: 8D 05 06  STA ram_sfx_0605
+;C - - - - - 0x003345 00:F335: A5 42     LDA ram_demo_flag
+;C - - - - - 0x003347 00:F337: 8D 05 06  STA ram_sfx_0605
 C - - - - - 0x00334A 00:F33A: AD 91 04  LDA ram_obj_1_pos_X_lo + con_ofs_obj + $90
 C - - - - - 0x00334D 00:F33D: F0 BE     BEQ bra_F2FD_RTS
 C - - - - - 0x00334F 00:F33F: A9 02     LDA #$02
