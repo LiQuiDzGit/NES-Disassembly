@@ -11,6 +11,28 @@
 
 
 
+
+;BGM 01 - STAGE START
+;BGM 02 - STAGE CLEAR!
+;BGM 03 - STAGE MUSIC (SIREN NORMAL))
+;BGM 04 - FREIGHT MUSIC (SIREN FRIGHT))
+;BGM 05 - DEATH
+
+;SFX 01 - SELECT
+;SFX 02 - EAT PELLET
+;SFX 03 - EAT GHOST
+;SFX 04 - EAT FRUITS
+;SFX 05 - DEATH (RESERVED)
+
+
+
+
+
+
+
+
+
+
 vec_C033_RESET:
 C - - - - - 0x000043 00:C033: 78        SEI
 C - - - - - 0x000044 00:C034: D8        CLD
@@ -76,9 +98,16 @@ C - - - - - 0x0000A7 00:C097: C8        INY
 C - - - - - 0x0000A8 00:C098: C0 0F     CPY #$0F
 C - - - - - 0x0000AA 00:C09A: D0 F5     BNE bra_C091_loop
 ; set hi-score to 10.000
-C - - - - - 0x0000AC 00:C09C: A9 01     LDA #$01
-C - - - - - 0x0000AE 00:C09E: 85 64     STA ram_score_hi + $03
-bra_C0A0:
+;C - - - - - 0x0000AC 00:C09C: A9 01     LDA #$02
+;C - - - - - 0x0000AE 00:C09E: 85 64     STA ram_score_hi + $02
+
+bra_C0A0:                                               ; NEA START MENU
+                                        LDA #$00
+                                        STA $4015       ; NEA MUTE
+;                    					LDA #$00
+;                    					STA $4104       ; NEA ALBUM 0 (DEFAULT
+;                    					LDA #$01
+;                    					STA $4105       ; NEA BGM 01
 C - - - - - 0x0000B0 00:C0A0: A0 00     LDY #con_script_00
 C - - - - - 0x0000B2 00:C0A2: 84 3F     STY ram_script
 C - - - - - 0x0000B4 00:C0A4: A9 07     LDA #> ram_oam
@@ -100,7 +129,7 @@ bra_C0B2_loop:
 - - - - - - 0x0000D5 00:C0C5: D0 EB     BNE bra_C0B2_loop
 bra_C0C7:
 C - - - - - 0x0000D7 00:C0C7: A9 1F     LDA #$1F
-C - - - - - 0x0000D9 00:C0C9: 8D 15 40  STA $4015
+;C - - - - - 0x0000D9 00:C0C9: 8D 15 40  STA $4015
 C - - - - - 0x0000DC 00:C0CC: A9 C0     LDA #$C0
 C - - - - - 0x0000DE 00:C0CE: 8D 17 40  STA $4017
 C - - - - - 0x0000E1 00:C0D1: 20 18 EE  JSR sub_EE18
@@ -274,7 +303,7 @@ tbl_C1F5:
 ofs_000_C1FB_00:
 C - - J - - 0x00020B 00:C1FB: A5 4D     LDA ram_btn_1p
 C - - - - - 0x00020D 00:C1FD: 29 0C     AND #con_btns_SS
-C - - - - - 0x00020F 00:C1FF: F0 07     BEQ bra_C208
+;C - - - - - 0x00020F 00:C1FF: F0 07     BEQ bra_C208    ; lkz skip start menu scrool up
 - - - - - - 0x000211 00:C201: A9 02     LDA #con_script_02
 - - - - - - 0x000213 00:C203: 85 3F     STA ram_script
 - - - - - - 0x000215 00:C205: 4C 68 C1  JMP loc_C168
@@ -468,6 +497,9 @@ C - - - - - 0x000401 00:C3F1: A9 04     LDA #con_script_04
 C - - - - - 0x000403 00:C3F3: 85 3F     STA ram_script
 C - - - - - 0x000405 00:C3F5: 4C DE C1  JMP loc_C1DE
 bra_C3F8:
+                                        LDA #$01  ; force timer to stay at 01
+                                        STA $0087 ; prevent demo from loading
+                                        JSR StartMenu_UpDownA_OptAndCycles ; nea expention
 C - - - - - 0x000408 00:C3F8: A5 4D     LDA ram_btn_1p
 C - - - - - 0x00040A 00:C3FA: 29 04     AND #con_btn_Select
 C - - - - - 0x00040C 00:C3FC: C5 50     CMP ram_direction_1
@@ -1334,6 +1366,10 @@ tbl_C976:
 
 
 loc_C98A:
+                                        LDA #$00
+                                        STA nea_once_flag
+                    					LDA #$01
+                                        JSR NEA_PlayMusic  ; NEA BGM #01 - STAGE START
 C D 2 - - - 0x00099A 00:C98A: A9 08     LDA #$08
 C - - - - - 0x00099C 00:C98C: 8D 00 20  STA $2000
 C - - - - - 0x00099F 00:C98F: 85 43     STA ram_for_2000
@@ -1761,6 +1797,10 @@ C - - - - - 0x000C4E 00:CC3E: D0 23     BNE bra_CC63
 C - - - - - 0x000C50 00:CC40: C6 DB     DEC ram_00DB
 C - - - - - 0x000C52 00:CC42: D0 13     BNE bra_CC57
 C - - - - - 0x000C54 00:CC44: E6 87     INC ram_0087
+                                        LDA #$00
+                                        STA nea_once_flag
+                    					LDA #$05
+                                        JSR NEA_PlayMusic  ; NEA BGM #05 - DEATH
 C - - - - - 0x000C56 00:CC46: A9 0A     LDA #$0A
 C - - - - - 0x000C58 00:CC48: 85 DB     STA ram_00DB
 C - - - - - 0x000C5A 00:CC4A: 8D 03 06  STA ram_sfx_death
@@ -2746,6 +2786,8 @@ C - - - - - 0x0012A2 00:D292: E6 D9     INC ram_kill_cnt
 C - - - - - 0x0012A4 00:D294: A9 08     LDA #$08
 C - - - - - 0x0012A6 00:D296: 95 B8     STA ram_00B8,X
 C - - - - - 0x0012A8 00:D298: 8D 07 06  STA ram_sfx_eat_ghost
+                    					LDA #$03   ; NEA EAT GHOST
+                                        JSR NEA_PlaySFX ; PLAY SFX #3
 C - - - - - 0x0012AB 00:D29B: A9 06     LDA #con_script_freeze
 C - - - - - 0x0012AD 00:D29D: 85 3F     STA ram_script
 C - - - - - 0x0012AF 00:D29F: 4C 60 E0  JMP loc_E060
@@ -2765,6 +2807,8 @@ C - - - - - 0x0012C5 00:D2B5: F0 01     BEQ bra_D2B8
 C - - - - - 0x0012C7 00:D2B7: 60        RTS
 bra_D2B8:
 C - - - - - 0x0012C8 00:D2B8: 85 D7     STA ram_fruit_timer_hi
+                    					LDA #$04
+                                        JSR NEA_PlaySFX ; PLAY SFX #4 FRUIT
 C - - - - - 0x0012CA 00:D2BA: A9 80     LDA #$80
 C - - - - - 0x0012CC 00:D2BC: 85 D8     STA ram_fruit_timer_lo
 C - - - - - 0x0012CE 00:D2BE: 85 8B     STA ram_008B
@@ -3902,11 +3946,19 @@ C - - - - - 0x0018FE 00:D8EE: C9 42     CMP #$42
 C - - - - - 0x001900 00:D8F0: B0 01     BCS bra_D8F3
 C - - - - - 0x001902 00:D8F2: C8        INY
 bra_D8F3:
-C - - - - - 0x001903 00:D8F3: A9 01     LDA #$01
-C - - - - - 0x001905 00:D8F5: 99 0A 06  STA ram_060A,Y  ; 060A 060B 060C
-C - - - - - 0x001908 00:D8F8: 60        RTS
-
-
+; one-shot global guard
+                                        LDA nea_once_flag
+                                        BNE doneX
+                                        LDA #$01
+                                        STA nea_once_flag
+; original behavior
+                                        LDA #$01
+                                        STA ram_060A,Y
+; NEA trigger
+                                        LDA #$03
+                                        JSR NEA_PlayMusic  ; NEA BGM #03 - STAGE MUSIC (SIREN)
+doneX:
+                                        RTS
 
 sub_D8F9:
 C - - - - - 0x001909 00:D8F9: A5 51     LDA ram_direction_2
@@ -4742,6 +4794,10 @@ C - - - - - 0x001F74 00:DF64: C6 6A     DEC ram_pellet_cnt_p1
 C - - - - - 0x001F76 00:DF66: D0 0C     BNE bra_DF74
 C - - - - - 0x001F78 00:DF68: A9 0C     LDA #con_script_stage_clear
 C - - - - - 0x001F7A 00:DF6A: 85 3F     STA ram_script
+
+                                        LDA #$02         ; 
+                                        JSR NEA_PlayMusic    ; NEA BGM #02 - STAGE CLEAR
+
 C - - - - - 0x001F7C 00:DF6C: A9 00     LDA #$00
 C - - - - - 0x001F7E 00:DF6E: 85 87     STA ram_0087
 C - - - - - 0x001F80 00:DF70: A9 48     LDA #$48    ; pause timer
@@ -4770,6 +4826,9 @@ bra_DF99_skip_fruit_spawn:
 C - - - - - 0x001FA9 00:DF99: A5 6A     LDA ram_pellet_cnt_p1
 C - - - - - 0x001FAB 00:DF9B: 29 01     AND #$01
 C - - - - - 0x001FAD 00:DF9D: A8        TAY
+                    					LDA #$02
+                    					JSR NEA_PlaySFX ; NEA SFX #02
+
 C - - - - - 0x001FAE 00:DF9E: A9 01     LDA #$01
 C - - - - - 0x001FB0 00:DFA0: 99 04 06  STA ram_sfx_eat_pellet,Y  ; 0604 0605
 C - - - - - 0x001FB3 00:DFA3: 4C 60 E0  JMP loc_E060
@@ -4814,6 +4873,10 @@ tbl_DFBE_fruit_id:
 
 
 sub_DFC6:
+    LDA #$00
+    STA nea_once_flag
+                    					LDA #$04
+                                        JSR NEA_PlayMusic  ; NEA BGM #04
 C - - - - - 0x001FD6 00:DFC6: A5 8C     LDA ram_008C
 C - - - - - 0x001FD8 00:DFC8: D0 06     BNE bra_DFD0
 C - - - - - 0x001FDA 00:DFCA: A9 1E     LDA #$1E
@@ -7374,7 +7437,7 @@ C - - - - - 0x002E40 00:EE30: 85 F5     STA ram_00F5
 C - - - - - 0x002E42 00:EE32: A9 40     LDA #$40
 C - - - - - 0x002E44 00:EE34: 85 F7     STA ram_00F7
 C - - - - - 0x002E46 00:EE36: A9 1F     LDA #$1F
-C - - - - - 0x002E48 00:EE38: 8D 15 40  STA $4015
+;C - - - - - 0x002E48 00:EE38: 8D 15 40  STA $4015
 C - - - - - 0x002E4B 00:EE3B: A9 C0     LDA #$C0
 C - - - - - 0x002E4D 00:EE3D: 8D 17 40  STA $4017
 sub_EE40:
@@ -8770,33 +8833,209 @@ _off001_F3ED_0F:
 - D 3 - I - 0x003434 00:F424: 03        .byte $03   ; 
 - D 3 - I - 0x003435 00:F425: F0        .byte con_sfx_off   ; 
 
+NEA_PlayMusic:
+    PHA           ; SAVE A (BGM #)
+    LDA ram_aopt_2     ; LOAD NEA album (from start menu)
+    STA $4104     ; NEA album
+    STA $06B7     ; debug
+    PLA           ; RESTORE A (BGM #)
+    STA $4105     ; play track "A"
+    STA $06C7     ; debug
+    RTS
+
+NEA_PlaySFX:
+    PHA           ; SAVE A (SFX #)
+    LDA ram_aopt_3     ; LOAD NEA SFX ALBUM (from start menu)
+    STA $4104     ; NEA SFX album
+    STA $06B8     ; debug
+    PLA           ; RESTORE A (SFX #)
+    STA $4106     ; play SFX "A"
+    STA $06C8     ; debug
+    RTS
+
+;--------------------------------------------------
+; StartMenu_UpDownA_OptAndCycles
+;
+; - UP/DOWN changes ram_menu_opt ($06A1) 00->04
+; - A button cycles one of the four RAM values:
+;     opt=0 -> $06A5: 00->03 ; Ms Pac-man
+;     opt=1 -> $06A6: 00->04 ; MAZE COLOR
+;     opt=2 -> $06A7: 00->03 ; BGM (ALBUM #)
+;     opt=3 -> $06A8: 00->04 ; SFX (ALBUM #)
+;     opt=4 -> $06A9: 00->03 ; CLEAR HIGH SCORE (00 = NORM / 01 = ARE YOU SURE / 02 = ERRASE SCORE
+;
+;--------------------------------------------------
+
+StartMenu_UpDownA_OptAndCycles:
+
+    ; newPress = (cur XOR prev) AND cur
+    LDA $004D               ; cur buttons
+    TAX                     ; keep cur in X
+    EOR ram_btn_prev_menu
+    AND $004D               ; A = newPress bits
+
+    ; -------- DOWN (bit5=$20): opt++ wrap 4 --------
+    PHA                     ; save newPress for later (A button)
+    AND #$20
+    BEQ chk_up
+
+    LDA ram_menu_opt
+    CLC
+    ADC #$01
+    CMP #$05
+    BCC store_opt_down
+    LDA #$00
+store_opt_down:
+    STA ram_menu_opt
+
+chk_up:
+    PLA                     ; restore newPress
+    PHA                     ; save again for A check later
+    AND #$10                ; UP (bit4=$10)
+    BEQ chk_a
+
+    ; -------- UP: opt-- wrap 0->3 --------
+    LDA ram_menu_opt
+    BEQ wrap_opt_4
+    SEC
+    SBC #$01
+    JMP store_opt_up
+wrap_opt_4:
+    LDA #$04
+store_opt_up:
+    STA ram_menu_opt
+
+chk_a:
+    PLA                     ; restore newPress
+    AND #$01                ; A button (bit0=$01)
+    BEQ done ; no new A press
+
+    ; -------- NEW A press: choose which RAM to cycle --------
+    LDA ram_menu_opt
+    BEQ do_opt0            ; 00
+    CMP #$01
+    BEQ do_opt1            ; 01
+    CMP #$02
+    BEQ do_opt2            ; 02
+    CMP #$03
+    BEQ do_opt3            ; 03
+    ; else 04
+    JMP do_opt4
+
+do_opt0:
+    ; $06A5: 0->1->0
+    LDA ram_aopt_0
+    CLC
+    ADC #$01
+    CMP #$02
+    BCC store_a0
+    LDA #$00
+store_a0:
+    STA ram_aopt_0
+    JMP done
+
+do_opt1:
+    ; $06A6: 0->1->2->3->4->0
+    LDA ram_aopt_1
+    CLC
+    ADC #$01
+    CMP #$05
+    BCC store_a1
+    LDA #$00
+store_a1:
+    STA ram_aopt_1
+    JMP done
+
+do_opt2:
+    ; $06A7: 0->1->2->0
+    LDA ram_aopt_2
+    CLC
+    ADC #$01
+    CMP #$03
+    BCC store_a2
+    LDA #$00
+store_a2:
+    STA ram_aopt_2
+    JMP done
+
+do_opt3:
+    ; $06A8: 0->1->2->0
+    LDA ram_aopt_3
+    CLC
+    ADC #$01
+    CMP #$03
+    BCC store_a3
+    LDA #$00
+store_a3:
+    STA ram_aopt_3
+    JMP done
+
+do_opt4:
+    ; $06A9: 00->01->02->00
+    LDA ram_aopt_4        ; $06A9
+    CLC
+    ADC #$01
+    CMP #$03
+    BCC store_a4
+    LDA #$00
+
+store_a4:
+    STA ram_aopt_4
+
+    ; ---- if value == 02, clear hi-score ----
+    CMP #$02
+    BNE done              ; only trigger when reaching 02
+
+    ; clear ram_score_hi (6 bytes)
+    LDA #$00
+    LDY #$05
+clear_hiscore_loop:
+    STA ram_score_hi,Y
+    DEY
+    BPL clear_hiscore_loop
+    JSR clear_value_reset
+    JMP bra_C086
+
+done:
+    ; update prev controller state
+    TXA
+    STA ram_btn_prev_menu
+    RTS
+
+clear_value_reset:
+    STA ram_menu_opt
+    STA ram_aopt_4 
+    RTS
+
+
+
 
 ; bzk garbage
-- - - - - - 0x003436 00:F426: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003440 00:F430: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003450 00:F440: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003460 00:F450: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003470 00:F460: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003480 00:F470: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003490 00:F480: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x0034A0 00:F490: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x0034B0 00:F4A0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x0034C0 00:F4B0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x0034D0 00:F4C0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x0034E0 00:F4D0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x0034F0 00:F4E0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003500 00:F4F0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003510 00:F500: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003520 00:F510: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003530 00:F520: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003540 00:F530: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003550 00:F540: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003560 00:F550: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003570 00:F560: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003580 00:F570: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003590 00:F580: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x0035A0 00:F590: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x0035B0 00:F5A0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x003436 00:F426: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x003440 00:F430: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x003450 00:F440: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x003460 00:F450: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x003470 00:F460: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x003480 00:F470: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x003490 00:F480: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x0034A0 00:F490: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x0034B0 00:F4A0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x0034C0 00:F4B0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x0034D0 00:F4C0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x0034E0 00:F4D0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x0034F0 00:F4E0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x003500 00:F4F0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x003510 00:F500: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x003520 00:F510: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x003530 00:F520: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x003540 00:F530: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x003550 00:F540: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x003560 00:F550: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x003570 00:F560: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x003580 00:F570: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x003590 00:F580: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x0035A0 00:F590: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+;- - - - - - 0x0035B0 00:F5A0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
 - - - - - - 0x0035C0 00:F5B0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
 - - - - - - 0x0035D0 00:F5C0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
 - - - - - - 0x0035E0 00:F5D0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
