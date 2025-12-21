@@ -4,7 +4,7 @@
 .org $C000  ; for listing file
 ; 0x000010-0x00400F
 
-
+;kong-fu
 
 ; bzk garbage
 - D 2 - - A 0x000010 00:C000: 52        .byte "RC802 1.4 850430"
@@ -69,6 +69,7 @@ C - - - - - 0x000073 00:C063: 20 B0 C4  JSR sub_C4B0_prepare_nametables_and_rese
 C - - - - - 0x000076 00:C066: A5 53     LDA ram_for_2000
 C - - - - - 0x000078 00:C068: 8D 00 20  STA $2000
 loc_C06B_infinite_loop:
+
 C D 2 - - - 0x00007B 00:C06B: E6 0F     INC ram_random
 C - - - - - 0x00007D 00:C06D: 4C 6B C0  JMP loc_C06B_infinite_loop
 
@@ -118,8 +119,13 @@ C - - - - - 0x0000C4 00:C0B4: D0 1D     BNE bra_C0D3
 - - - - - - 0x0000CD 00:C0BD: 90 14     BCC bra_C0D3
 - - - - - - 0x0000CF 00:C0BF: A9 C0     LDA #$C0
 - - - - - - 0x0000D1 00:C0C1: 20 45 CE  JSR sub_CE45
+										LDA #%00000001 ; PAUSE - STOP BGM
+										STA $4101      ; PUSH #%00000001 to $4101
+
 - - - - - - 0x0000D4 00:C0C4: A9 97     LDA #$97
 - - - - - - 0x0000D6 00:C0C6: 85 67     STA ram_0067
+										
+;										JSR NEA_PlayBGM ; NEA PAUSE 97
 - - - - - - 0x0000D8 00:C0C8: 20 45 CE  JSR sub_CE45
 - - - - - - 0x0000DB 00:C0CB: A9 11     LDA #con_FF80_11
 - - - - - - 0x0000DD 00:C0CD: 20 57 C4  JSR sub_C457
@@ -129,6 +135,9 @@ C - - - - - 0x0000E3 00:C0D3: A5 67     LDA ram_0067
 C - - - - - 0x0000E5 00:C0D5: F0 03     BEQ bra_C0DA
 - - - - - - 0x0000E7 00:C0D7: 20 0E F9  JSR sub_F90E
 bra_C0DA:
+; NEA RESUME
+		LDA #%00000000 ; PAUSE - RESUME
+		STA $4101      ; PUSH #%00000000 to $4101
 C - - - - - 0x0000EA 00:C0DA: A9 00     LDA #$00
 C - - - - - 0x0000EC 00:C0DC: 85 67     STA ram_0067
 bra_C0DE:
@@ -553,7 +562,6 @@ C - - J - - 0x000360 00:C350: E6 60     INC ram_lives
 C - - - - - 0x000362 00:C352: A9 00     LDA #$00
 C - - - - - 0x000364 00:C354: 85 D2     STA ram_00D2
 C - - - - - 0x000366 00:C356: 85 A4     STA ram_00A4
-C - - - - - 0x000368 00:C358: A9 00     LDA #$00
 C - - - - - 0x00036A 00:C35A: 20 45 CE  JSR sub_CE45
 C - - - - - 0x00036D 00:C35D: A9 40     LDA #$40
 C - - - - - 0x00036F 00:C35F: 20 45 CE  JSR sub_CE45
@@ -842,7 +850,7 @@ C - - - - - 0x0004C3 00:C4B3: 4C B9 C4  JMP loc_C4B9_reset_initialization_stuff
 sub_C4B6_write_palette_and_reset_init:
 C - - - - - 0x0004C6 00:C4B6: 20 CC C4  JSR sub_C4CC_write_palette
 loc_C4B9_reset_initialization_stuff:
-C D 2 - - - 0x0004C9 00:C4B9: A9 1F     LDA #$1F
+C D 2 - - - 0x0004C9 00:C4B9: A9 1F     LDA #$00
 C - - - - - 0x0004CB 00:C4BB: 8D 15 40  STA $4015
 C - - - - - 0x0004CE 00:C4BE: A9 C0     LDA #$C0
 C - - - - - 0x0004D0 00:C4C0: 8D 17 40  STA $4017
@@ -1010,7 +1018,9 @@ C - - - - - 0x0005C6 00:C5B6: 85 0E     STA ram_btn_Start
 C - - - - - 0x0005C8 00:C5B8: A6 50     LDX ram_game_mode
 C - - - - - 0x0005CA 00:C5BA: BD E2 C5  LDA tbl_C5E2_40,X
 C - - - - - 0x0005CD 00:C5BD: 85 03     STA ram_0003_flag
-C - - - - - 0x0005CF 00:C5BF: A9 03     LDA #$03
+C - - - - - 0x0005CF 00:C5BF: A9 03     LDA #$01
+										JSR NEA_PlayBGM ; NEA BGM GONG
+										LDA #$03
 C - - - - - 0x0005D1 00:C5C1: 4C 28 C3  JMP loc_C328
 bra_C5C4:
 C - - - - - 0x0005D4 00:C5C4: E6 50     INC ram_game_mode
@@ -1170,6 +1180,7 @@ bra_C68C:
 C - - - - - 0x00069C 00:C68C: 20 02 C7  JSR sub_C702
 C - - - - - 0x00069F 00:C68F: 20 CD C6  JSR sub_C6CD_display_stage_in_hud
 C - - - - - 0x0006A2 00:C692: 20 A6 C6  JSR sub_C6A6_display_score_in_hud
+										JSR NEA_PlayBGM ; NEA MAIN BGM
 ofs_002_C695_01:
 C - - - - - 0x0006A5 00:C695: A5 03     LDA ram_0003_flag   ; check for con_0003_80_unused
 sub_C697:
@@ -1554,6 +1565,7 @@ C - - - - - 0x000896 00:C886: 60        RTS
 
 
 sub_C887:
+
 C - - - - - 0x000897 00:C887: A5 64     LDA ram_0064
 C - - - - - 0x000899 00:C889: D0 43     BNE bra_C8CE
 C - - - - - 0x00089B 00:C88B: A5 09     LDA ram_frm_cnt
@@ -2230,9 +2242,9 @@ tbl_CB42_sound_and_music_data:
 - D 2 - - - 0x000B6C 00:CB5C: 38 CD     .word _off004_CD38_0E   ; main theme
 - D 2 - - - 0x000B6E 00:CB5E: C1 CD     .word _off004_CDC1_0F   ; 
 - D 2 - - - 0x000B70 00:CB60: D4 CD     .word _off004_CDD4_10   ; 
-- D 2 - - - 0x000B72 00:CB62: E9 CD     .word _off004_CDE9_11   ; 
-- D 2 - - - 0x000B74 00:CB64: 03 CE     .word _off004_CE03_12   ; 
-- D 2 - - - 0x000B76 00:CB66: 1F CE     .word _off004_CE1F_13   ; 
+- D 2 - - - 0x000B72 00:CB62: E9 CD     .word _off004_CDE9_11   ; game over
+- D 2 - - - 0x000B74 00:CB64: 03 CE     .word _off004_CE03_12   ; game over
+- D 2 - - - 0x000B76 00:CB66: 1F CE     .word _off004_CE1F_13   ; not audio
 - D 2 - - - 0x000B78 00:CB68: 0F CC     .word _off004_CC0F_14   ; 
 - D 2 - - - 0x000B7A 00:CB6A: 34 CC     .word _off004_CC34_15   ; 
 - D 2 - - - 0x000B7C 00:CB6C: 59 CC     .word _off004_CC59_16   ; 
@@ -3062,6 +3074,7 @@ _off004_CE34_17:
 
 sub_CE45:
 loc_CE45:
+										JSR NEA_PlaySFX
 C D 2 - - - 0x000E55 00:CE45: 86 49     STX ram_se_0049_t01_save_Y
 C - - - - - 0x000E57 00:CE47: 84 38     STY ram_se_0038_t01_save_Y
 C - - - - - 0x000E59 00:CE49: 85 27     STA ram_se_0027_t01
@@ -4116,6 +4129,7 @@ C - - - - - 0x0013D3 00:D3C3: 29 07     AND #con_btn_Right + con_btn_Left + con_
 C - - - - - 0x0013D5 00:D3C5: 85 9A     STA ram_player_state
 C - - - - - 0x0013D7 00:D3C7: A5 05     LDA ram_btn_press
 C - - - - - 0x0013D9 00:D3C9: 29 08     AND #con_btn_Up
+										JSR NEA_PlaySFX
 C - - - - - 0x0013DB 00:D3CB: 05 9A     ORA ram_player_state
 C - - - - - 0x0013DD 00:D3CD: 85 9A     STA ram_player_state
 C - - - - - 0x0013DF 00:D3CF: A5 05     LDA ram_btn_press
@@ -4520,12 +4534,16 @@ C - - - - - 0x00162D 00:D61D: 60        RTS
 bra_D61E:
 C - - - - - 0x00162E 00:D61E: A5 60     LDA ram_lives
 C - - - - - 0x001630 00:D620: D0 0F     BNE bra_D631
-C - - - - - 0x001632 00:D622: A9 11     LDA #$11
+										LDA #$11
 C - - - - - 0x001634 00:D624: 20 45 CE  JSR sub_CE45
 C - - - - - 0x001637 00:D627: A9 52     LDA #$52
 C - - - - - 0x001639 00:D629: 20 45 CE  JSR sub_CE45
+										LDA #$02
+										
+										JSR NEA_PlayBGM ; game over
 C - - - - - 0x00163C 00:D62C: A9 93     LDA #$93
 C - - - - - 0x00163E 00:D62E: 20 45 CE  JSR sub_CE45
+
 bra_D631:
 C - - - - - 0x001641 00:D631: A9 01     LDA #$01
 C - - - - - 0x001643 00:D633: 85 0A     STA ram_000A_flag
@@ -5727,6 +5745,7 @@ C - - - - - 0x001DB6 00:DDA6: A9 00     LDA #$00
 C - - - - - 0x001DB8 00:DDA8: 85 DD     STA ram_hit_timer
 C - - - - - 0x001DBA 00:DDAA: 60        RTS
 bra_DDAB:
+										JSR NEA_PlayBGM ; death
 C - - - - - 0x001DBB 00:DDAB: A2 00     LDX #$00    ; con_state_idle
 C - - - - - 0x001DBD 00:DDAD: 86 C2     STX ram_00C2
 C - - - - - 0x001DBF 00:DDAF: 86 6B     STX ram_006B
@@ -5804,6 +5823,8 @@ bra_DE1C:
 C - - - - - 0x001E2C 00:DE1C: A5 DC     LDA ram_hp_enemy
 C - - - - - 0x001E2E 00:DE1E: C9 09     CMP #$09
 C - - - - - 0x001E30 00:DE20: 90 25     BCC bra_DE47
+										LDA #$0A
+										JSR NEA_PlayBGM
 C - - - - - 0x001E32 00:DE22: A9 09     LDA #$09
 C - - - - - 0x001E34 00:DE24: 85 DC     STA ram_hp_enemy
 C - - - - - 0x001E36 00:DE26: A2 00     LDX #$00
@@ -6227,7 +6248,9 @@ C - - - - - 0x0020C4 00:E0B4: C9 81     CMP #$81
 C - - - - - 0x0020C6 00:E0B6: B0 1B     BCS bra_E0D3
 C - - - - - 0x0020C8 00:E0B8: 20 63 DF  JSR sub_DF63
 bra_E0BB:
+
 C - - - - - 0x0020CB 00:E0BB: A9 80     LDA #$80
+;										JSR NEA_PlaySFX_ByFighter
 C - - - - - 0x0020CD 00:E0BD: 05 D2     ORA ram_00D2
 C - - - - - 0x0020CF 00:E0BF: 85 D2     STA ram_00D2
 C - - - - - 0x0020D1 00:E0C1: A5 7E     LDA ram_007E
@@ -7299,6 +7322,7 @@ C - - - - - 0x0025DA 00:E5CA: A5 09     LDA ram_frm_cnt
 C - - - - - 0x0025DC 00:E5CC: 29 30     AND #$30
 C - - - - - 0x0025DE 00:E5CE: F0 7B     BEQ bra_E64B
 C - - - - - 0x0025E0 00:E5D0: A9 80     LDA #$80
+										JSR NEA_PlaySFX_ByFighter
 C - - - - - 0x0025E2 00:E5D2: 85 A4     STA ram_00A4
 C - - - - - 0x0025E4 00:E5D4: 20 64 EA  JSR sub_EA64
 C - - - - - 0x0025E7 00:E5D7: BD 7F EA  LDA tbl_EA7F,X
@@ -7464,6 +7488,7 @@ C - - - - - 0x0026BE 00:E6AE: 4A        LSR
 C - - - - - 0x0026BF 00:E6AF: B0 D9     BCS bra_E68A
 C - - - - - 0x0026C1 00:E6B1: A9 0C     LDA #$0C
 bra_E6B3:
+										JSR NEA_PlaySFX_ByFighter
 C - - - - - 0x0026C3 00:E6B3: 85 C3     STA ram_00C3
 C - - - - - 0x0026C5 00:E6B5: 4C BA EC  JMP loc_ECBA
 
@@ -7509,6 +7534,7 @@ C - - - - - 0x002708 00:E6F8: 4A        LSR
 C - - - - - 0x002709 00:E6F9: B0 F3     BCS bra_E6EE
 C - - - - - 0x00270B 00:E6FB: A9 0A     LDA #$0A
 bra_E6FD:
+										JSR NEA_PlaySFX_ByFighter
 C - - - - - 0x00270D 00:E6FD: 85 C3     STA ram_00C3
 C - - - - - 0x00270F 00:E6FF: 4C 70 EC  JMP loc_EC70
 bra_E702:
@@ -8551,6 +8577,7 @@ C - - - - - 0x002C0D 00:EBFD: 65 7E     ADC ram_007E
 C - - - - - 0x002C0F 00:EBFF: AA        TAX
 C - - - - - 0x002C10 00:EC00: BD 57 ED  LDA tbl_ED57,X
 C - - - - - 0x002C13 00:EC03: 85 C3     STA ram_00C3
+										JSR NEA_PlaySFX_ByFighter
 C - - - - - 0x002C15 00:EC05: A5 68     LDA ram_enemy_type
 C - - - - - 0x002C17 00:EC07: 20 3D EC  JSR sub_EC3D
 C - - - - - 0x002C1A 00:EC0A: 4C 5F E7  JMP loc_E75F
@@ -12035,26 +12062,108 @@ C - - - - - 0x003E6D 00:FE5D: A9 2F     LDA #con_FF80_2F
 C - - - - - 0x003E6F 00:FE5F: 4C AB C3  JMP loc_C3AB
 
 
-; bzk garbage
-- - - - - - 0x003E72 00:FE62: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003E80 00:FE70: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003E90 00:FE80: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003EA0 00:FE90: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003EB0 00:FEA0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003EC0 00:FEB0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003ED0 00:FEC0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003EE0 00:FED0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003EF0 00:FEE0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003F00 00:FEF0: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003F10 00:FF00: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003F20 00:FF10: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003F30 00:FF20: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003F40 00:FF30: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003F50 00:FF40: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003F60 00:FF50: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003F70 00:FF60: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
-- - - - - - 0x003F80 00:FF70: FF        .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF   ; 
+NEA_PlayBGM:
+    PHA                   ; save A
+    LDA $0000             ; check if DEMO
+    CMP #$02              ; if == 02...
+    BEQ NEA_PlayBGM_Skip  ; skip BGM Music
 
+    LDA #$FF
+    STA $4104             ; NEA album = FF
+    PLA                   ; restore A (track #)
+    STA $4105             ; NEA track = A
+    STA $0008             ; show track (debug)
+    RTS
+
+NEA_PlayBGM_Skip:
+    PLA 				  ; restore A 
+    RTS                   ; do nothing when $0000 == 02 (DEMO)
+
+
+
+NEA_PlaySFX:
+    PHA
+    LDA #$FF
+    STA $4104             ; NEA album
+    PLA
+	CMP #$80             ; is it 80? (Chain sound)
+    BEQ NEA_SFX_Skip ; yes -> ignore
+    CMP #$02             ; is it 02? (Chain sound)
+    BEQ NEA_SFX_Skip ; yes -> ignore
+    STA $4106             ; NEA track
+    STA $0006
+    RTS
+
+
+
+NEA_PlaySFX_ByFighter:
+    PHA                  ; save SFX id (A) while we inspect $0068
+    LDA $0068            ; fighter id
+    CMP #$00
+    BEQ NEA_SFX_Wang
+    CMP #$01
+    BEQ NEA_SFX_Tao
+    CMP #$02
+    BEQ NEA_SFX_Chen
+    CMP #$03
+    BEQ NEA_SFX_Lang
+    CMP #$04
+    BEQ NEA_SFX_Mu
+    ; unknown fighter id -> skip everything safely
+    PLA                  ; restore stack (discard saved SFX id)
+    RTS
+
+NEA_SFX_Wang:
+    PLA                  ; restore A = SFX id
+    CMP #$02             ; is it 02 (chains) 
+    BEQ NEA_SFX_Skip 	 ; yes -> ignore
+    STA $4106            ; NEA track
+    STA $0006
+    RTS
+
+NEA_SFX_Tao:
+ 	PLA                  ; restore A = SFX id
+    CMP #$04             ; is it 04 
+    BEQ NEA_SFX_Skip 	 ; yes -> ignore
+    CMP #$02             ; is it 02 (chains)
+    BEQ NEA_SFX_Skip 	 ; yes -> ignore
+
+    STA $4106            ; NEA track
+    STA $0006            ; debug / last SFX
+    RTS
+
+
+NEA_SFX_Chen:
+    PLA
+  	STA $4106            ; NEA track
+    STA $0006            ; debug / last SFX
+    RTS
+
+NEA_SFX_Lang:            ; (pink female)
+    PLA
+    CMP #$04             ; is it 04 (swing/male kick) 
+    BEQ NEA_SFX_Change 	 ; change it to female kick (kick)
+	STA $4106             ; NEA track
+    STA $0006             ; debug / last SFX
+    RTS
+
+NEA_SFX_Change:    
+    PHA
+    LDA #$03             ; female kick2
+    STA $4106            ; NEA track
+    STA $0006            ; debug / last SFX
+    PLA 
+	RTS 
+
+
+NEA_SFX_Mu:
+    PLA
+	STA $4106             ; NEA track
+    STA $0006             ; debug / last SFX
+    RTS
+
+NEA_SFX_Skip:
+    RTS                  ; do nothing
 
 
 tbl_FF80:
@@ -12116,7 +12225,7 @@ tbl_FF80:
 
 
 tbl_FFF7:
-- D 3 - - - 0x004007 00:FFF7: 03        .byte $03   ; FD
+- D 3 - - - 0x004007 00:FFF7: 03        .byte $05   ; FD ; start with 5 live
 - D 3 - - - 0x004008 00:FFF8: 01        .byte $01   ; FE
 - D 3 - - - 0x004009 00:FFF9: 03        .byte $03   ; FF
 
